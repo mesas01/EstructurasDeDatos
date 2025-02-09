@@ -9,3 +9,6 @@ proyecto
 
 # Ignorar archivos de respaldo
 *~
+# Ignorar el archivo ejecutable
+proyecto
+proyecto.bin
