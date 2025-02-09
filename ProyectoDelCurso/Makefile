@@ -5,7 +5,7 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++17
 
 # Nombre del ejecutable
-TARGET = proyecto
+TARGET = proyecto.bin
 
 # Directorio de código fuente
 SRC_DIR = src
