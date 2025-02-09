@@ -1,11 +1,18 @@
 #include <iostream>
 #include "comandos.h"
+#include <fstream>
+
+bool archivoExiste(const std::string& nombreArchivo) {
+    std::ifstream archivo(nombreArchivo);
+    return archivo.good();
+}
+
 
 void cargarImagen(const std::vector<std::string>& argumentos) {
-    if (argumentos.size() != 2) {
-        std::cout << "Error: Uso correcto -> cargar_imagen <nombre_imagen.pgm>\n";
+    if (!archivoExiste(argumentos[1])) {
+        std::cout << "Error: El archivo no existe.\n";
         return;
-    }
+    }    
     std::cout << "La imagen " << argumentos[1] << " ha sido cargada.\n";
 }
 
@@ -14,7 +21,25 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
         std::cout << "Error: Uso correcto -> cargar_volumen <nombre_base> <n_im>\n";
         return;
     }
-    std::cout << "El volumen " << argumentos[1] << " ha sido cargado.\n";
+
+    std::string nombreBase = argumentos[1];
+    int nImagenes = std::stoi(argumentos[2]);
+    bool todasExisten = true;
+
+    for (int i = 1; i <= nImagenes; ++i) {
+        // Construye el nombre del archivo con dos dígitos (01, 02, ..., 10, etc.)
+        std::string nombreArchivo = nombreBase + (i < 10 ? "0" : "") + std::to_string(i) + ".ppm";
+        if (!archivoExiste(nombreArchivo)) {
+            std::cout << "Error: El archivo " << nombreArchivo << " no existe.\n";
+            todasExisten = false;
+        }
+    }
+
+    if (todasExisten) {
+        std::cout << "El volumen " << nombreBase << " ha sido cargado.\n";
+    } else {
+        std::cout << "Error: No se pudo cargar el volumen debido a archivos faltantes.\n";
+    }
 }
 
 void infoImagen() {
@@ -35,7 +60,7 @@ void proyeccion2D(const std::vector<std::string>& argumentos) {
 
 void codificarImagen(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 2) {
-        std::cout << "Error: Uso correcto -> codificar_imagen <nombre_archivo.huf>\n";
+        std::cout << "Error: Uso correcto -> codificar_imagen <nombre_archivo.pgm>\n";
         return;
     }
     std::cout << "La imagen ha sido codificada y almacenada en " << argumentos[1] << ".\n";
@@ -43,7 +68,7 @@ void codificarImagen(const std::vector<std::string>& argumentos) {
 
 void decodificarArchivo(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 3) {
-        std::cout << "Error: Uso correcto -> decodificar_archivo <nombre_archivo.huf> <nombre_imagen.pgm>\n";
+        std::cout << "Error: Uso correcto -> decodificar_archivo <nombre_archivo.pgm> <nombre_imagen.pgm>\n";
         return;
     }
     std::cout << "El archivo " << argumentos[1] << " ha sido decodificado y almacenado en " << argumentos[2] << ".\n";

@@ -48,10 +48,10 @@ void ayuda() {
     std::cout << "||      <nombre_archivo.pgm>                     ||\n";
     std::cout << "||      - Genera una proyección 2D.              ||\n";
     std::cout << "||                                               ||\n";
-    std::cout << "||   7. codificar_imagen <nombre_archivo.huf>    ||\n";
+    std::cout << "||   7. codificar_imagen <nombre_archivo.pgm>    ||\n";
     std::cout << "||      - Codifica la imagen en memoria.         ||\n";
     std::cout << "||                                               ||\n";
-    std::cout << "||   8. decodificar_archivo <nombre_archivo.huf> ||\n";
+    std::cout << "||   8. decodificar_archivo <nombre_archivo.pgm> ||\n";
     std::cout << "||      <nombre_imagen.pgm>                      ||\n";
     std::cout << "||      - Decodifica un archivo.                 ||\n";
     std::cout << "||                                               ||\n";

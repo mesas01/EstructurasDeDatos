@@ -9,7 +9,7 @@ int main() {
     std::string comando;
     std::vector<std::string> argumentos;
 
-    mostrarBienvenida(); // Mostrar el banner de bienvenida
+    mostrarBienvenida(); // Mostrar el menu de bienvenida
 
     while (true) {
         std::cout << "$ ";
