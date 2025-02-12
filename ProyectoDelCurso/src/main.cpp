@@ -1,3 +1,11 @@
+/************************************************
+ * PROYECTO 1
+ * FECHA: 12-02-2025
+ * MATERIA: ESTRUCTURAS DE DATOS
+ * AUTORES: SANTIAGO MESA Y JERONIMO CHAPARRO
+ * ARCHIVO: MAIN.CPP
+ ***********************************************/
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -19,7 +27,7 @@ int main() {
         argumentos = dividirComando(comando);
 
         if (argumentos.empty()) {
-            continue; // Si no se ingresó ningún comando, continuar
+            continue; // Si no se ingresó ningún comando, continuar.
         }
 
         // Validar y ejecutar el comando

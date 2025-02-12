@@ -1,3 +1,10 @@
+/************************************************
+ * PROYECTO 1
+ * FECHA: 12-02-2025
+ * MATERIA: ESTRUCTURAS DE DATOS
+ * AUTORES: SANTIAGO MESA Y JERONIMO CHAPARRO
+ * ARCHIVO: COMANDOS.H
+ ***********************************************/
 #ifndef COMANDOS_H
 #define COMANDOS_H
 
