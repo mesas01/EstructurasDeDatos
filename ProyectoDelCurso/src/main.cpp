@@ -19,7 +19,7 @@ int main() {
         argumentos = dividirComando(comando);
 
         if (argumentos.empty()) {
-            continue; // Si no se ingresó ningún comando, continuar
+            continue; // Si no se ingresó ningún comando, continuar.
         }
 
         // Validar y ejecutar el comando
