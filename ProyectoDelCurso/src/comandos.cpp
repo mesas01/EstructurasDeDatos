@@ -48,15 +48,15 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
         std::cout << "Error: No se pudo cargar el volumen debido a archivos faltantes.\n";
     }
 }
-
+//Funcion para anunciar la informacion de la imagen
 void infoImagen() {
     std::cout << "Información de la imagen cargada.\n";
 }
-
+//Funcion para la informacion del volumen
 void infoVolumen() {
     std::cout << "Información del volumen cargado.\n";
 }
-//funcion para la proyeccion 2D
+//funcion para anunciar la proyeccion 2D
 void proyeccion2D(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 4) {
         std::cout << "Error: Uso correcto -> proyeccion2D <dirección> <criterio> <nombre_archivo.pgm>\n";
@@ -64,7 +64,7 @@ void proyeccion2D(const std::vector<std::string>& argumentos) {
     }
     std::cout << "Proyección 2D generada y almacenada en " << argumentos[3] << ".\n";
 }
-//Funcion para codificar imagenes
+//Funcion para anunciar la codificacion de imagenes
 void codificarImagen(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 2) {
         std::cout << "Error: Uso correcto -> codificar_imagen <nombre_archivo.pgm>\n";
@@ -72,7 +72,7 @@ void codificarImagen(const std::vector<std::string>& argumentos) {
     }
     std::cout << "La imagen ha sido codificada y almacenada en " << argumentos[1] << ".\n";
 }
-//Funcion para decodificar un archivo
+//Funcion para anunciar la decodificacion un archivo
 void decodificarArchivo(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 3) {
         std::cout << "Error: Uso correcto -> decodificar_archivo <nombre_archivo.pgm> <nombre_imagen.pgm>\n";
@@ -80,7 +80,7 @@ void decodificarArchivo(const std::vector<std::string>& argumentos) {
     }
     std::cout << "El archivo " << argumentos[1] << " ha sido decodificado y almacenado en " << argumentos[2] << ".\n";
 }
-//Funcion para segmentar 
+//Funcion para anunciar la segmentacion de un string 
 void segmentar(const std::vector<std::string>& argumentos) {
     if (argumentos.size() < 3) {
         std::cout << "Error: Uso correcto -> segmentar <salida_imagen.pgm> <semillas>\n";
