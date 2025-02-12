@@ -8,13 +8,13 @@
 #include <iostream>
 #include "comandos.h"
 #include <fstream>
-
+/*Funcion que veifica si el archivo existe*/
 bool archivoExiste(const std::string& nombreArchivo) {
     std::ifstream archivo(nombreArchivo);
     return archivo.good();
 }
 
-
+/*Funcion para cargar una imagen*/
 void cargarImagen(const std::vector<std::string>& argumentos) {
     if (!archivoExiste(argumentos[1])) {
         std::cout << "Error: El archivo no existe.\n";
@@ -22,7 +22,7 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     }    
     std::cout << "La imagen " << argumentos[1] << " ha sido cargada.\n";
 }
-
+/*Funcion para cargar un volumen*/
 void cargarVolumen(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 3) {
         std::cout << "Error: Uso correcto -> cargar_volumen <nombre_base> <n_im>\n";
@@ -56,7 +56,7 @@ void infoImagen() {
 void infoVolumen() {
     std::cout << "Información del volumen cargado.\n";
 }
-
+//funcion para la proyeccion 2D
 void proyeccion2D(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 4) {
         std::cout << "Error: Uso correcto -> proyeccion2D <dirección> <criterio> <nombre_archivo.pgm>\n";
@@ -64,7 +64,7 @@ void proyeccion2D(const std::vector<std::string>& argumentos) {
     }
     std::cout << "Proyección 2D generada y almacenada en " << argumentos[3] << ".\n";
 }
-
+//Funcion para codificar imagenes
 void codificarImagen(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 2) {
         std::cout << "Error: Uso correcto -> codificar_imagen <nombre_archivo.pgm>\n";
@@ -72,7 +72,7 @@ void codificarImagen(const std::vector<std::string>& argumentos) {
     }
     std::cout << "La imagen ha sido codificada y almacenada en " << argumentos[1] << ".\n";
 }
-
+//Funcion para decodificar un archivo
 void decodificarArchivo(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 3) {
         std::cout << "Error: Uso correcto -> decodificar_archivo <nombre_archivo.pgm> <nombre_imagen.pgm>\n";
@@ -80,7 +80,7 @@ void decodificarArchivo(const std::vector<std::string>& argumentos) {
     }
     std::cout << "El archivo " << argumentos[1] << " ha sido decodificado y almacenado en " << argumentos[2] << ".\n";
 }
-
+//Funcion para segmentar 
 void segmentar(const std::vector<std::string>& argumentos) {
     if (argumentos.size() < 3) {
         std::cout << "Error: Uso correcto -> segmentar <salida_imagen.pgm> <semillas>\n";
