@@ -12,6 +12,7 @@ using namespace std;
 
 int numb_inst = 0;
 
+/*Creación de la clase nodo*/
 template <class T>
 class Node {
 public:
@@ -22,12 +23,14 @@ public:
          << ++numb_inst
          << " are in existence right now" << endl;
   }
+  /*Destructor*/
   ~Node () {
     cout << "Destroying Node, "
          << --numb_inst
          << " are in existence right now" << endl;
     next_ = 0;
   }
+  /*Iniciadores*/
   Node<T>* next () const { 
     return next_; 
   }
@@ -115,6 +118,7 @@ private:
 int main (int argc, char **argv) {
   LinkedList<int> *list = new LinkedList<int> ();
 
+  /*Se incertan valores a la lista*/
   list->insert (1);
   list->insert (2);
   list->insert (3);
@@ -123,6 +127,7 @@ int main (int argc, char **argv) {
   cout << "The fully created list is:" << endl;
   list->print ();
 
+  /*Se eliminan los valores de la lista*/
   cout << endl << "Now removing elements:" << endl;
   list->remove (4);
   list->print ();

@@ -1,6 +1,7 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
+/*Clase Rectangulo*/
 struct Rectangle {
   float posX;
   float posY;
