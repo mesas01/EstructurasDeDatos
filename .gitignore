@@ -1,5 +1,0 @@
-# Ignorar ejecutables sin extensión
-ejercicio*
-*.out
-*.exe
-*.o
