@@ -41,35 +41,37 @@ class ArchivoTexto{
         list<string> getListaLineas();
         //Función que lee el archivo y guarda el texto en la lista listaLineas y la subcadena en el dato subcadena
         void leerArchivo();
-    };
+    
+};
 
-    class ColaP{
-        private:
-            queue<pair<string, int>> colaPalabras;  // Cola para guardar las palabras y la linea en la que aparecen
-            ArchivoTexto archivoTexto; // Objeto de la clase ArchivoTexto con todo el texto del archivo y su subcadena
-            string invSubcadena; // Variable en la que se guarda la subcadena invertida
-        public:
-            // Destructor
-            ~ColaP();
-            //Funcion  que le asigna un valor al dato colaPalabras
-            void setColaPalabras(queue<pair<string, int>> colaPalabras);
-            //Funcion  que devuelve el dato colaPalabras
-            queue<pair<string, int>> getColaParabras();
-            //Funcion  que le asigna un valor al dato archivoTexto
-            void setArchivoTexto(ArchivoTexto archivoTexto);
-            //Funcion  que devuelve el dato archivoTexto
-            ArchivoTexto getArchivoTexto(); 
-            //Funcion  que le asigna un valor al dato invSubcadena
-            void setInvSubcadena(string invSubcadena);
-            //Funcion  que devuelve el dato invSubcadena
-            string getInvSubcadena();
-            //Función que llena la cola con las palabras del archivo y la linea en la que aparecen
-            void llenarCola();
-            //Función que imprime las palabras que contienen la subcadena, la linea en la que aparecen y el numero total de palabras que la contienen
-            void imprimirOrdenada();
-            //Función que imprime las palabras que contienen la subcadena invertida, la linea en la que aparecen y  el numero total de palabras que la contienen
-            void imprimirInvertida();
+class ColaP{
+    private:
+        queue<pair<string, int>> colaPalabras;  // Cola para guardar las palabras y la linea en la que aparecen
+        ArchivoTexto archivoTexto; // Objeto de la clase ArchivoTexto con todo el texto del archivo y su subcadena
+        string invSubcadena; // Variable en la que se guarda la subcadena invertida
+    public:
+        // Destructor
+        ~ColaP();
+        //Funcion  que le asigna un valor al dato colaPalabras
+        void setColaPalabras(queue<pair<string, int>> colaPalabras);
+        //Funcion  que devuelve el dato colaPalabras
+        queue<pair<string, int>> getColaParabras();
+        //Funcion  que le asigna un valor al dato archivoTexto
+        void setArchivoTexto(ArchivoTexto archivoTexto);
+        //Funcion  que devuelve el dato archivoTexto
+        ArchivoTexto getArchivoTexto(); 
+        //Funcion  que le asigna un valor al dato invSubcadena
+        void setInvSubcadena(string invSubcadena);
+        //Funcion  que devuelve el dato invSubcadena
+        string getInvSubcadena();
+        //Función que llena la cola con las palabras del archivo y la linea en la que aparecen
+        void llenarCola();
+        //Función que imprime las palabras que contienen la subcadena, la linea en la que aparecen y el numero total de palabras que la contienen
+        void imprimirOrdenada();
+        //Función que imprime las palabras que contienen la subcadena invertida, la linea en la que aparecen y  el numero total de palabras que la contienen
+        void imprimirInvertida();
 
-            void invertirSubcadena();
-    };
+        void invertirSubcadena();
+};
+
 #endif
