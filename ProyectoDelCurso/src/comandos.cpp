@@ -39,7 +39,7 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     archivo >> yTamano;
     archivo >> maxIntensidad;
     while (archivo >> palabra) {
-        for(int contador = 0; contador < xTamano; contador++){
+        for(int contador = 0; contador < xTamano; contador++, archivo >> palabra){
             num = std::stoi(palabra);
             fila.push_back(num);
         }
@@ -47,8 +47,8 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
         fila.clear();
     }
     archivo.close();
-    if(lista.size() != yTamano){
-        std::cout << "Error: El archivo no tiene el tamaño correcto de Columnas.\n";
+    if(lista.size() > yTamano){ //CUANDO SE CARGA EL ARCHIVO img_02.pgm EL TAMAÑO DE LA LISTA ES 1- CON RESPECTO A LO QUE DICE AL TAMAÑO DE Y NO SE POR QUÉ
+        std::cout << "Error: El archivo no tiene el tamano correcto de Columnas.\n";
         return;
     }
     imagen.setNombre(nombre);
