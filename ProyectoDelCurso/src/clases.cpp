@@ -3,7 +3,7 @@
  * FECHA: 01-03-2025
  * MATERIA: ESTRUCTURAS DE DATOS
  * AUTORES: SANTIAGO MESA Y JERONIMO CHAPARRO
- * ARCHIVO: CLASES.CPP
+ * ARCHIVO: CLASES.CPP *
  ***********************************************/
 #include "clases.h"
 
