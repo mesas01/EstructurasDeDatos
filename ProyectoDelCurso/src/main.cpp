@@ -12,6 +12,7 @@
 #include "interfaz.h"
 #include "comandos.h"
 #include "utilidades.h"
+#include "clases.h"
 
 int main() {
     std::string comando;

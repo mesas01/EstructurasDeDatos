@@ -7,7 +7,10 @@
  ***********************************************/
 #include <iostream>
 #include "comandos.h"
+#include "clases.h"
 #include <fstream>
+/*Creamos una clase de tipo Imagen*/
+Imagen imagen;
 /*Funcion que veifica si el archivo existe*/
 bool archivoExiste(const std::string& nombreArchivo) {
     std::ifstream archivo(nombreArchivo);
@@ -19,7 +22,41 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     if (!archivoExiste(argumentos[1])) {
         std::cout << "Error: El archivo no existe.\n";
         return;
-    }    
+    }
+    std::string nombre = argumentos[1];   
+    std::string codigo;
+    int xTamano;
+    int yTamano;
+    int maxIntensidad;
+    std::list<std::list<int>> lista;
+    std::list<int> fila;
+    std::ifstream archivo(nombre);
+    std::string palabra;
+    int num;
+    
+    archivo >> codigo;
+    archivo >> xTamano;
+    archivo >> yTamano;
+    archivo >> maxIntensidad;
+    while (archivo >> palabra) {
+        for(int contador = 0; contador < xTamano; contador++){
+            num = std::stoi(palabra);
+            fila.push_back(num);
+        }
+        lista.push_back(fila);
+        fila.clear();
+    }
+    archivo.close();
+    if(lista.size() != yTamano){
+        std::cout << "Error: El archivo no tiene el tamaño correcto de Columnas.\n";
+        return;
+    }
+    imagen.setNombre(nombre);
+    imagen.setCodigo(codigo);
+    imagen.setXTamano(xTamano);
+    imagen.setYTamano(yTamano);
+    imagen.setMaxIntensidad(maxIntensidad);
+    imagen.setLista(lista);
     std::cout << "La imagen " << argumentos[1] << " ha sido cargada.\n";
 }
 /*Funcion para cargar un volumen*/
