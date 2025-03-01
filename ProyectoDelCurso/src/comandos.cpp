@@ -11,6 +11,7 @@
 #include <fstream>
 /*Creamos una clase de tipo Imagen*/
 Imagen imagen;
+Volumen volumen;
 /*Funcion que veifica si el archivo existe*/
 bool archivoExiste(const std::string& nombreArchivo) {
     std::ifstream archivo(nombreArchivo);
@@ -64,6 +65,10 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
 void cargarVolumen(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 3) {
         std::cout << "Error: Uso correcto -> cargar_volumen <nombre_base> <n_im>\n";
+        return;
+    }
+    if (!archivoExiste(argumentos[1])) {
+        std::cout << "Error: El archivo no existe.\n";
         return;
     }
 

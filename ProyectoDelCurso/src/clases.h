@@ -33,6 +33,20 @@ class Imagen{
         int getMaxIntensidad();
         std::list<std::list<int>> getLista();
 };
+class Volumen{
+    private:
+        std::string nombre;
+        int nImagenes;
+        std::list<Imagen> lista;
+    public:
+        ~Volumen();
+        void setNombre(std::string nombre);
+        void setNImagenes(int nImagenes);
+        void setLista(std::list<Imagen> lista);
+        std::string getNombre();
+        int getNImagenes();
+        std::list<Imagen> getLista();
+};
 
 
 
