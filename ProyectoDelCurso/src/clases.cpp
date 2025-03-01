@@ -7,6 +7,7 @@
  ***********************************************/
 #include "clases.h"
 
+//Clase Imagen
 Imagen::~Imagen(){
     lista.clear();
 }
@@ -44,5 +45,28 @@ int Imagen::getMaxIntensidad(){
     return maxIntensidad;
 }
 std::list<std::list<int>> Imagen::getLista(){
+    return lista;
+}
+
+//Clase Volumen
+Volumen::~Volumen(){
+    lista.clear();
+}
+void Volumen::setNombre(std::string nombre){
+    this->nombre = nombre;
+}
+void Volumen::setNImagenes(int nImagenes){
+    this->nImagenes = nImagenes;
+}
+void Volumen::setLista(std::list<Imagen> lista){
+    this->lista = lista;
+}
+std::string Volumen::getNombre(){
+    return nombre;
+}
+int Volumen::getNImagenes(){
+    return nImagenes;
+}
+std::list<Imagen> Volumen::getLista(){
     return lista;
 }
