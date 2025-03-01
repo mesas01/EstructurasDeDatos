@@ -24,29 +24,40 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
         std::cout << "Error: El archivo no existe.\n";
         return;
     }
-    imagen.setNombre(argumentos[1]);
     std::ifstream archivo(argumentos[1]);
-    std::string valor;
-    archivo >> valor;
-    imagen.setCodigo(valor);
-    archivo >> valor;
-    int numero = std::stoi(valor);
-    imagen.setXTamano(numero);
-    archivo >> valor;
-    numero = std::stoi(valor);
-    imagen.setYTamano(numero);
-    archivo >> valor;
-    numero = std::stoi(valor);
-    imagen.setMaxIntensidad(numero);
-    if (imagen.getLista().empty()) {
-        imagen.getLista().emplace_back(); // Añade una sublista vacía
+    if (!archivo.is_open()) {
+        std::cerr << "Error: No se pudo abrir el archivo." << std::endl;
+        return;
     }
-    while (archivo >> valor) {
-        numero = std::stoi(valor);
-        imagen.getLista().back().push_back(numero);
+    std::string codigo;
+    int xTamano, yTamano, maxIntensidad;
+
+    // Leer el encabezado
+    archivo >> codigo >> xTamano >> yTamano >> maxIntensidad;
+
+    // Configurar el objeto Imagen
+    imagen.setNombre(argumentos[1]);
+    imagen.setCodigo(codigo);
+    imagen.setXTamano(xTamano);
+    imagen.setYTamano(yTamano);
+    imagen.setMaxIntensidad(maxIntensidad);
+
+    // Leer los píxeles y almacenarlos en la lista de listas
+    std::list<std::list<int>> listaPixeles;
+    for (int y = 0; y < yTamano; ++y) {
+        std::list<int> fila;
+        for (int x = 0; x < xTamano; ++x) { // *3 porque cada píxel tiene R, G y B
+            int valor;
+            archivo >> valor;
+            fila.push_back(valor);
+        }
+        listaPixeles.push_back(fila);
     }
+
+    imagen.setLista(listaPixeles);
+
     archivo.close();
-    std::cout << "Tamano de la lista: " << imagen.getLista().size() << " yTamano: " << imagen.getYTamano() << std::endl;
+    //std::cout << "Tamano de la lista: " << imagen.getLista().size() << " yTamano: " << imagen.getYTamano() << std::endl;
     if(imagen.getLista().size() != imagen.getYTamano()){ //CUANDO SE CARGA EL ARCHIVO img_02.pgm EL TAMAÑO DE LA LISTA ES 1- CON RESPECTO A LO QUE DICE AL TAMAÑO DE Y NO SE POR QUÉ
         std::cout << "Error: El archivo no tiene el tamano correcto de Columnas.\n";
         return;
