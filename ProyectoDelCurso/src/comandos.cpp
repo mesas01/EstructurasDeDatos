@@ -47,7 +47,8 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
         fila.clear();
     }
     archivo.close();
-    if(lista.size() > yTamano){ //CUANDO SE CARGA EL ARCHIVO img_02.pgm EL TAMAÑO DE LA LISTA ES 1- CON RESPECTO A LO QUE DICE AL TAMAÑO DE Y NO SE POR QUÉ
+    std::cout << "Tamano de la lista: " << lista.size() << " yTamano: " << yTamano << std::endl;
+    if(lista.size() != yTamano){ //CUANDO SE CARGA EL ARCHIVO img_02.pgm EL TAMAÑO DE LA LISTA ES 1- CON RESPECTO A LO QUE DICE AL TAMAÑO DE Y NO SE POR QUÉ
         std::cout << "Error: El archivo no tiene el tamano correcto de Columnas.\n";
         return;
     }
