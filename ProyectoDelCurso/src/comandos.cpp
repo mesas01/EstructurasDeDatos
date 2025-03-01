@@ -24,41 +24,33 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
         std::cout << "Error: El archivo no existe.\n";
         return;
     }
-    std::string nombre = argumentos[1];   
-    std::string codigo;
-    int xTamano;
-    int yTamano;
-    int maxIntensidad;
-    std::list<std::list<int>> lista;
-    std::list<int> fila;
-    std::ifstream archivo(nombre);
-    std::string palabra;
-    int num;
-    
-    archivo >> codigo;
-    archivo >> xTamano;
-    archivo >> yTamano;
-    archivo >> maxIntensidad;
-    while (archivo >> palabra) {
-        for(int contador = 0; contador < xTamano; contador++, archivo >> palabra){
-            num = std::stoi(palabra);
-            fila.push_back(num);
-        }
-        lista.push_back(fila);
-        fila.clear();
+    imagen.setNombre(argumentos[1]);
+    std::ifstream archivo(argumentos[1]);
+    std::string valor;
+    archivo >> valor;
+    imagen.setCodigo(valor);
+    archivo >> valor;
+    int numero = std::stoi(valor);
+    imagen.setXTamano(numero);
+    archivo >> valor;
+    numero = std::stoi(valor);
+    imagen.setYTamano(numero);
+    archivo >> valor;
+    numero = std::stoi(valor);
+    imagen.setMaxIntensidad(numero);
+    if (imagen.getLista().empty()) {
+        imagen.getLista().emplace_back(); // Añade una sublista vacía
+    }
+    while (archivo >> valor) {
+        numero = std::stoi(valor);
+        imagen.getLista().back().push_back(numero);
     }
     archivo.close();
-    std::cout << "Tamano de la lista: " << lista.size() << " yTamano: " << yTamano << std::endl;
-    if(lista.size() != yTamano){ //CUANDO SE CARGA EL ARCHIVO img_02.pgm EL TAMAÑO DE LA LISTA ES 1- CON RESPECTO A LO QUE DICE AL TAMAÑO DE Y NO SE POR QUÉ
+    std::cout << "Tamano de la lista: " << imagen.getLista().size() << " yTamano: " << imagen.getYTamano() << std::endl;
+    if(imagen.getLista().size() != imagen.getYTamano()){ //CUANDO SE CARGA EL ARCHIVO img_02.pgm EL TAMAÑO DE LA LISTA ES 1- CON RESPECTO A LO QUE DICE AL TAMAÑO DE Y NO SE POR QUÉ
         std::cout << "Error: El archivo no tiene el tamano correcto de Columnas.\n";
         return;
     }
-    imagen.setNombre(nombre);
-    imagen.setCodigo(codigo);
-    imagen.setXTamano(xTamano);
-    imagen.setYTamano(yTamano);
-    imagen.setMaxIntensidad(maxIntensidad);
-    imagen.setLista(lista);
     std::cout << "La imagen " << argumentos[1] << " ha sido cargada.\n";
 }
 /*Funcion para cargar un volumen*/
@@ -67,22 +59,29 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
         std::cout << "Error: Uso correcto -> cargar_volumen <nombre_base> <n_im>\n";
         return;
     }
-    if (!archivoExiste(argumentos[1])) {
-        std::cout << "Error: El archivo no existe.\n";
-        return;
-    }
-
+    std::string nombre;
+    std::vector<std::string> argumentosI;
     std::string nombreBase = argumentos[1];
     int nImagenes = std::stoi(argumentos[2]);
     bool todasExisten = true;
 
+    std::string ultimos22 = nombreBase.substr(nombreBase.size() > 16 ? nombreBase.size() - 16 : 0);
+    if (ultimos22.size() >= 3) {
+        ultimos22.erase(ultimos22.size() - 3, 3); // Elimina los últimos 4 caracteres
+    }
     for (int i = 1; i <= nImagenes; ++i) {
         // Construye el nombre del archivo con dos dígitos (01, 02, ..., 10, etc.)
-        std::string nombreArchivo = nombreBase + (i < 10 ? "0" : "") + std::to_string(i) + ".ppm";
+        std::string nombreArchivo = nombreBase + ultimos22 + "0" + std::to_string(i) + ".ppm";
         if (!archivoExiste(nombreArchivo)) {
             std::cout << "Error: El archivo " << nombreArchivo << " no existe.\n";
             todasExisten = false;
         }
+
+        argumentosI.push_back("vacio");
+        argumentosI.push_back(nombreArchivo);
+        cargarImagen(argumentosI);
+        volumen.getLista().push_back(imagen);
+
     }
 
     if (todasExisten) {
