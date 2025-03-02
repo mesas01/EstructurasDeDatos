@@ -10,15 +10,16 @@
 
 #include <vector>
 #include <string>
+#include <list>
+#include <algorithm>
+#include <sstream>
 //Todas las funciones de los comandos
 void cargarImagen(const std::vector<std::string>& argumentos);
 void cargarVolumen(const std::vector<std::string>& argumentos);
 void infoImagen();
 void infoVolumen();
 void proyeccion2D(const std::vector<std::string>& argumentos);
-void generarProyeccion(std::list<std::list<int>>& proyeccion, int xTamano, int yTamano, const std::string& criterio);
-int procesarCriterio(const std::vector<int>& valores, const std::string& criterio);
-void guardarPGM(const std::list<std::list<int>>& proyeccion, const std::string& nombreArchivo, int xTamano, int yTamano);
+void guardarPGM(const std::list<std::list<int>>& proyeccion, const std::string& nombreArchivo);
 void codificarImagen(const std::vector<std::string>& argumentos);
 void decodificarArchivo(const std::vector<std::string>& argumentos);
 void segmentar(const std::vector<std::string>& argumentos);

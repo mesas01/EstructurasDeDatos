@@ -31,7 +31,7 @@ class Imagen{
         int getXTamano();
         int getYTamano();
         int getMaxIntensidad();
-        std::list<std::list<int>> getLista();
+        const std::list<std::list<int>>& getLista() const;
 };
 class Volumen{
     private:
@@ -45,7 +45,7 @@ class Volumen{
         void setLista(std::list<Imagen> lista);
         std::string getNombre();
         int getNImagenes();
-        std::list<Imagen> getLista();
+        const std::list<Imagen>& getLista() const;
 };
 
 
