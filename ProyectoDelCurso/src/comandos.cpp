@@ -31,6 +31,7 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
         std::cerr << "Error: No se pudo abrir el archivo." << std::endl;
         return;
     }
+    
     std::string codigo;
     int xTamano, yTamano, maxIntensidad;
 
@@ -87,9 +88,12 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
     }else {
         ultimos22.erase(ultimos22.size() - 3, 3); // Elimina los últimos 4 caracteres
     }
-    for (int i = 1; i <= nImagenes; ++i) {
+    for (int i= 1; i <= nImagenes; i++) {
+        std::cout << "Valor de i: " << i << std::endl;
         // Construye el nombre del archivo con dos dígitos (01, 02, ..., 10, etc.)
         std::string nombreArchivo = "imagenesPrueba/" + nombreBase + "/" + ultimos22 + "0" + std::to_string(i) + ".ppm";
+        //std::string nombreArchivo = "imagenesPrueba/" + nombreBase + (i < 10 ? "0" : "") + std::to_string(i) + ".ppm";
+        std::cout << "NOMBRE DEL ARCHIVO: " << nombreArchivo << std::endl;
         if (!archivoExiste(nombreArchivo)) {
             std::cout << "Error: El archivo " << nombreArchivo << " no existe.\n";
             todasExisten = false;
