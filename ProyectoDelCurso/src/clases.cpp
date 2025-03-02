@@ -44,7 +44,7 @@ int Imagen::getYTamano(){
 int Imagen::getMaxIntensidad(){
     return maxIntensidad;
 }
-std::list<std::list<int>> Imagen::getLista(){
+const std::list<std::list<int>>& Imagen::getLista() const {
     return lista;
 }
 
@@ -67,6 +67,6 @@ std::string Volumen::getNombre(){
 int Volumen::getNImagenes(){
     return nImagenes;
 }
-std::list<Imagen> Volumen::getLista(){
+const std::list<Imagen>& Volumen::getLista() const {
     return lista;
 }

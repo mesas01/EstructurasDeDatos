@@ -59,6 +59,8 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     imagen.setLista(listaPixeles);
     cargadaI = true;
     archivo.close();
+
+    //std::cout << "Tamano de la lista en X: " << imagen.getLista().front().size() << std::endl;
     //std::cout << "Tamano de la lista: " << imagen.getLista().size() << " yTamano: " << imagen.getYTamano() << std::endl;
     if(imagen.getLista().size() != imagen.getYTamano()){ //CUANDO SE CARGA EL ARCHIVO img_02.pgm EL TAMAÑO DE LA LISTA ES 1- CON RESPECTO A LO QUE DICE AL TAMAÑO DE Y NO SE POR QUÉ
         std::cout << "Error: El archivo no tiene el tamano correcto de Columnas.\n";
@@ -77,14 +79,17 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
     std::string nombreBase = argumentos[1];
     int nImagenes = std::stoi(argumentos[2]);
     bool todasExisten = true;
+    std::list<Imagen> lImagenes;
 
-    std::string ultimos22 = nombreBase.substr(nombreBase.size() > 16 ? nombreBase.size() - 16 : 0);
-    if (ultimos22.size() >= 3) {
+    std::string ultimos22 = nombreBase.erase(0, 15);
+    if (ultimos22.size() > 15) {
+        ultimos22.erase(ultimos22.size() - 4, 4); // Elimina los últimos 4 caracteres
+    }else {
         ultimos22.erase(ultimos22.size() - 3, 3); // Elimina los últimos 4 caracteres
     }
     for (int i = 1; i <= nImagenes; ++i) {
         // Construye el nombre del archivo con dos dígitos (01, 02, ..., 10, etc.)
-        std::string nombreArchivo = nombreBase + ultimos22 + "0" + std::to_string(i) + ".ppm";
+        std::string nombreArchivo = "imagenesPrueba/" + nombreBase + "/" + ultimos22 + "0" + std::to_string(i) + ".ppm";
         if (!archivoExiste(nombreArchivo)) {
             std::cout << "Error: El archivo " << nombreArchivo << " no existe.\n";
             todasExisten = false;
@@ -93,7 +98,7 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
         argumentosI.push_back("vacio");
         argumentosI.push_back(nombreArchivo);
         cargarImagen(argumentosI);
-        volumen.getLista().push_back(imagen);
+        lImagenes.push_back(imagen);
 
     }
     cargadaV = true;
@@ -106,6 +111,7 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
     }
     volumen.setNombre(nombreBase);
     volumen.setNImagenes(nImagenes);
+    volumen.setLista(lImagenes);
 }
 
 void infoImagen() {
@@ -130,71 +136,92 @@ void proyeccion2D(const std::vector<std::string>& argumentos) {
         return;
     }
     if (!cargadaV) {
-        std::cout << "El volumen aún no ha sido cargado en memoria.\n";
+        std::cout << "El volumen aun no ha sido cargado en memoria.\n";
         return;
     }
+    if (volumen.getLista().empty()) {
+        std::cerr << "Error: La lista de volumen está vacía.\n";
+        return;
+    }
+
+    /*auto primeraImagen = volumen.getLista().front();
+    auto primeraLista = primeraImagen.getLista().front();
+    std::cout << "Tamano de la primera lista en X: " << primeraLista.size() << std::endl;*/
 
     std::string direccion = argumentos[1];
     std::string criterio = argumentos[2];
     std::string nombreArchivo = argumentos[3];
 
-    int xTamano = volumen.getLista().front().getXTamano();
-    int yTamano = volumen.getLista().front().getYTamano();
-    int zTamano = volumen.getNImagenes();
-
+    if (criterio != "mediana" && criterio != "minimo" && criterio != "maximo" && criterio != "promedio"){
+        std::cout << "El Criterio ingresado no es valido.\n";
+        return;
+    }
     std::list<std::list<int>> proyeccion;
 
     if (direccion == "x") {
-        generarProyeccion(proyeccion, xTamano, yTamano, criterio);
-    } else if (direccion == "z") {
-        generarProyeccion(proyeccion, zTamano, xTamano, criterio);
+        for (auto it = volumen.getLista().begin(); it != volumen.getLista().end(); ++it){ //Recorre la lista de imagenes que seria el eje z
+            std::list<int> fila;
+            //std::cout << "Recorriendo el eje Z...\n";
+            for(auto it2 = it->getLista().begin(); it2 != it->getLista().end(); ++it2){ //Recorre la lista de listas de enteros, donde se guardan los pixeles en el eje y
+                /*std::cout << "Recorriendo el eje Y...\n";
+                std::cout << "Tamaño de la lista de enteros: " << it2->size() << "\n";*/
+                int minimo = 255;
+                int maximo = 0;
+                int promedio = 0;
+                if (criterio == "mediana"){
+                    std::vector<int> copia (it2->begin(),it2->end()); //Copia la lista de enteros en un vector copia
+                    sort(copia.begin(), copia.end());
+                    fila.push_back(copia[copia.size()/2]);
+                }else if (criterio == "minimo"){
+                    for(auto it3 = it2->begin(); it3 != it2->end(); ++it3){
+                        if(*it3 < minimo){ //Busca el minimo valor de la lista de enteros, que son los pixeles en x
+                            minimo = *it3;
+                        }
+                    }
+                    fila.push_back(minimo); //Proyecta el minimo valor de la lista de enteros, a lo que va a ser la primera fila de la proyeccion
+                } else if (criterio == "maximo"){
+                    for(auto it3 = it2->begin(); it3 != it2->end(); ++it3){
+                        if(*it3 > maximo){ //Busca el maximo valor de la lista de enteros, que son los pixeles en x
+                            maximo = *it3;
+                        }
+                    }
+                    fila.push_back(maximo); //Proyecta el maximo valor de la lista de enteros, a lo que va a ser la primera fila de la proyeccion
+                }else if (criterio == "promedio"){
+                    for(auto it3 = it2->begin(); it3 != it2->end(); ++it3){
+                        promedio += *it3; //Suma todos los valores de la lista de enteros, que son los pixeles en x
+                    }
+                    promedio = promedio / it2->size(); //Divide la suma de los valores de la lista de enteros, que son los pixeles en x, entre el tamaño de la lista
+                    fila.push_back(promedio); //Proyecta el promedio de la lista de enteros, a lo que va a ser la primera fila de la proyeccion
+                } else {
+                    std::cout << "Error: Criterio no valido.\n";
+                    return;
+                }
+            }
+            proyeccion.push_back(fila); //Agrega la fila a la proyeccion  
+            fila.clear();
+        }
     } else if (direccion == "y") {
-        generarProyeccion(proyeccion, yTamano, zTamano, criterio);
+        
+    } else if (direccion == "z") {
+
     } else {
         std::cout << "Error: Dirección no válida.\n";
         return;
     }
 
-    guardarPGM(proyeccion, nombreArchivo, xTamano, yTamano);
+    guardarPGM(proyeccion, nombreArchivo);
     std::cout << "La proyección 2D del volumen en memoria ha sido generada y almacenada en el archivo " << nombreArchivo << ".\n";
 }
-//Funcion para generar la proyeccion
-void generarProyeccion(std::list<std::list<int>>& proyeccion, int xTamano, int yTamano, const std::string& criterio) {
-    for (int y = 0; y < yTamano; ++y) {
-        std::list<int> fila;
-        for (int x = 0; x < xTamano; ++x) {
-            std::vector<int> profundidad;
-            for (const auto& imagen : volumen.getLista()) {
-                auto itFila = std::next(imagen.getLista().begin(), y);
-                auto itValor = std::next(itFila->begin(), x);
-                profundidad.push_back(*itValor);
-            }
-            fila.push_back(procesarCriterio(profundidad, criterio));
-        }
-        proyeccion.push_back(fila);
-    }
-}
-//Funcion para procesar el criterio
-int procesarCriterio(const std::vector<int>& valores, const std::string& criterio) {
-    if (valores.empty()) return 0;
-    if (criterio == "minimo") return *std::min_element(valores.begin(), valores.end());
-    if (criterio == "maximo") return *std::max_element(valores.begin(), valores.end());
-    if (criterio == "promedio") return std::accumulate(valores.begin(), valores.end(), 0) / valores.size();
-    if (criterio == "mediana") {
-        std::vector<int> copia = valores;
-        std::sort(copia.begin(), copia.end());
-        return copia[copia.size() / 2];
-    }
-    return 0;
-}
 //Funcion para guardar la proyeccion en un archivo
-void guardarPGM(const std::list<std::list<int>>& proyeccion, const std::string& nombreArchivo, int xTamano, int yTamano) {
+void guardarPGM(const std::list<std::list<int>>& proyeccion, const std::string& nombreArchivo) {
+    std::cout << "Intentando guardar el archivo: " << nombreArchivo << "\n";
     std::ofstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
         std::cerr << "La proyección 2D del volumen en memoria no ha podido ser generada.\n";
         return;
     }
-    archivo << "P2\n" << xTamano << " " << yTamano << "\n255\n";
+    
+    archivo << "P2\n" << proyeccion.front().size() << " " << proyeccion.size() << "\n255\n"; //Se ingresa en el archivo el tamaño en e X y luego el tamoño en Y
     for (const auto& fila : proyeccion) {
         for (int valor : fila) {
             archivo << valor << " ";
