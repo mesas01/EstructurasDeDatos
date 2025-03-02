@@ -31,7 +31,7 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
         std::cerr << "Error: No se pudo abrir el archivo." << std::endl;
         return;
     }
-    
+    std::cout << "Se ha ingresado la imagen: " << argumentos[1] << ".\n";
     std::string codigo;
     int xTamano, yTamano, maxIntensidad;
 
@@ -103,6 +103,7 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
         argumentosI.push_back(nombreArchivo);
         cargarImagen(argumentosI);
         lImagenes.push_back(imagen);
+        argumentosI.clear();
 
     }
     cargadaV = true;
