@@ -31,7 +31,7 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
         std::cerr << "Error: No se pudo abrir el archivo." << std::endl;
         return;
     }
-    
+    std::cout << "Se ha ingresado la imagen: " << argumentos[1] << ".\n";
     std::string codigo;
     int xTamano, yTamano, maxIntensidad;
 
@@ -103,6 +103,7 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
         argumentosI.push_back(nombreArchivo);
         cargarImagen(argumentosI);
         lImagenes.push_back(imagen);
+        argumentosI.clear();
 
     }
     cargadaV = true;
@@ -207,7 +208,20 @@ void proyeccion2D(const std::vector<std::string>& argumentos) {
     } else if (direccion == "y") {
         
     } else if (direccion == "z") {
-
+        int minimo = 255;
+        for (auto it = volumen.getLista().begin(); it != volumen.getLista().end(); ++it){ //Recorre la lista de imagenes que seria el eje z
+            std::list<int> fila;
+            for(auto it2 = it->getLista().begin(); it2 != it->getLista().end(); ++it2){ //Recorre la lista de listas de enteros, donde se guardan los pixeles en el eje y
+                    for(auto it3 = it2->begin(); it3 != it2->end(); ++it3){
+                        if(*it3 < minimo){ //Busca el minimo valor de la lista de enteros, que son los pixeles en x
+                            minimo = *it3;
+                        }
+                    }
+            fila.push_back(minimo); //Proyecta el minimo valor de la lista de enteros, a lo que va a ser la primera fila de la proyeccion
+            proyeccion.push_back(fila); //Agrega la fila a la proyeccion  
+            fila.clear();
+            }
+        } 
     } else {
         std::cout << "Error: Dirección no válida.\n";
         return;
