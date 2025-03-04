@@ -31,7 +31,7 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
         std::cerr << "Error: No se pudo abrir el archivo." << std::endl;
         return;
     }
-    std::cout << "Se ha ingresado la imagen: " << argumentos[1] << ".\n";
+    //std::cout << "Se ha ingresado la imagen: " << argumentos[1] << ".\n";
     std::string codigo;
     int xTamano, yTamano, maxIntensidad;
 
@@ -89,11 +89,11 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
         ultimos22.erase(ultimos22.size() - 3, 3); // Elimina los últimos 4 caracteres
     }
     for (int i= 1; i <= nImagenes; i++) {
-        std::cout << "Valor de i: " << i << std::endl;
+        //std::cout << "Valor de i: " << i << std::endl;
         // Construye el nombre del archivo con dos dígitos (01, 02, ..., 10, etc.)
         std::string numeroImagen = (i < 10) ? "0" + std::to_string(i) : std::to_string(i); // Asegura que los números de 1 dígito tengan un 0 al inicio
         std::string nombreArchivo = "imagenesPrueba/" + nombreBase + "/" + ultimos22 + numeroImagen + ".ppm";
-        std::cout << "NOMBRE DEL ARCHIVO: " << nombreArchivo << std::endl;
+        //std::cout << "NOMBRE DEL ARCHIVO: " << nombreArchivo << std::endl;
         if (!archivoExiste(nombreArchivo)) {
             std::cout << "Error: El archivo " << nombreArchivo << " no existe.\n";
             todasExisten = false;
@@ -118,7 +118,7 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
     volumen.setNImagenes(nImagenes);
     volumen.setLista(lImagenes);
 }
-
+//Funcion para mostrar la informacion de la imagen cargada en memoria
 void infoImagen() {
     if(!cargadaI){
         std::cout << "Error: No hay ninguna imagen cargada en memoria.\n";
@@ -126,10 +126,10 @@ void infoImagen() {
     }
     std::cout << "Imagen cargada en memoria: " << imagen.getNombre() << ", ancho: " << imagen.getXTamano() <<", alto: " << imagen.getYTamano() <<".\n";
 }
-
+//Funcion para mostrar la informacion del volumen cargado en memoria
 void infoVolumen() {
     if(!cargadaV){
-        std::cout << "Error: No hay ningun volumen cargad en memoria.\n";
+        std::cout << "Error: No hay ningun volumen cargado en memoria.\n";
         return;
     }
     std::cout << "Volumen cargado en memoria: " << volumen.getNombre() << ", Tamano: " << volumen.getNImagenes() << ".\n";
@@ -137,7 +137,7 @@ void infoVolumen() {
 //funcion para la proyeccion 2D
 void proyeccion2D(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 4) {
-        std::cout << "Error: Uso correcto -> proyeccion2D <dirección> <criterio> <nombre_archivo.pgm>\n";
+        std::cout << "Error: Uso correcto -> proyeccion2D <direccion> <criterio> <nombre_archivo.pgm>\n";
         return;
     }
 
@@ -157,7 +157,7 @@ void proyeccion2D(const std::vector<std::string>& argumentos) {
 
     // Validar criterio
     if (criterio != "minimo" && criterio != "maximo" && criterio != "promedio" && criterio != "mediana") {
-        std::cout << "Error: Criterio no válido. Use minimo, maximo, promedio, o mediana.\n";
+        std::cout << "Error: Criterio no valido. Use minimo, maximo, promedio, o mediana.\n";
         return;
     }
 
@@ -299,11 +299,11 @@ void proyeccion2D(const std::vector<std::string>& argumentos) {
 
     // Guardar la proyección en un archivo PGM
     guardarPGM(proyeccion, nombreArchivo);
-    std::cout << "La proyección 2D del volumen en memoria ha sido generada y almacenada en el archivo " << nombreArchivo << ".\n";
+    std::cout << "La proyeccion 2D del volumen en memoria ha sido generada y almacenada en el archivo " << nombreArchivo << ".\n";
 }
 //Funcion para guardar la proyeccion en un archivo
 void guardarPGM(const std::list<std::list<int>>& proyeccion, const std::string& nombreArchivo) {
-    std::cout << "Intentando guardar el archivo: " << nombreArchivo << "\n";
+    //std::cout << "Intentando guardar el archivo: " << nombreArchivo << "\n";
     std::ofstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
         std::cerr << "La proyección 2D del volumen en memoria no ha podido ser generada.\n";
