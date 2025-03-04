@@ -91,8 +91,8 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
     for (int i= 1; i <= nImagenes; i++) {
         //std::cout << "Valor de i: " << i << std::endl;
         // Construye el nombre del archivo con dos dígitos (01, 02, ..., 10, etc.)
-        std::string nombreArchivo = "imagenesPrueba/" + nombreBase + "/" + ultimos22 + "0" + std::to_string(i) + ".ppm";
-        //std::string nombreArchivo = "imagenesPrueba/" + nombreBase + (i < 10 ? "0" : "") + std::to_string(i) + ".ppm";
+        std::string numeroImagen = (i < 10) ? "0" + std::to_string(i) : std::to_string(i); // Asegura que los números de 1 dígito tengan un 0 al inicio
+        std::string nombreArchivo = "imagenesPrueba/" + nombreBase + "/" + ultimos22 + numeroImagen + ".ppm";
         //std::cout << "NOMBRE DEL ARCHIVO: " << nombreArchivo << std::endl;
         if (!archivoExiste(nombreArchivo)) {
             std::cout << "Error: El archivo " << nombreArchivo << " no existe.\n";
@@ -118,7 +118,7 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
     volumen.setNImagenes(nImagenes);
     volumen.setLista(lImagenes);
 }
-
+//Funcion para mostrar la informacion de la imagen cargada en memoria
 void infoImagen() {
     if(!cargadaI){
         std::cout << "Error: No hay ninguna imagen cargada en memoria.\n";
@@ -126,10 +126,10 @@ void infoImagen() {
     }
     std::cout << "Imagen cargada en memoria: " << imagen.getNombre() << ", ancho: " << imagen.getXTamano() <<", alto: " << imagen.getYTamano() <<".\n";
 }
-
+//Funcion para mostrar la informacion del volumen cargado en memoria
 void infoVolumen() {
     if(!cargadaV){
-        std::cout << "Error: No hay ningun volumen cargad en memoria.\n";
+        std::cout << "Error: No hay ningun volumen cargado en memoria.\n";
         return;
     }
     std::cout << "Volumen cargado en memoria: " << volumen.getNombre() << ", Tamano: " << volumen.getNImagenes() << ".\n";
@@ -137,101 +137,173 @@ void infoVolumen() {
 //funcion para la proyeccion 2D
 void proyeccion2D(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 4) {
-        std::cout << "Error: Uso correcto -> proyeccion2D <dirección> <criterio> <nombre_archivo.pgm>\n";
+        std::cout << "Error: Uso correcto -> proyeccion2D <direccion> <criterio> <nombre_archivo.pgm>\n";
         return;
     }
+
     if (!cargadaV) {
-        std::cout << "El volumen aun no ha sido cargado en memoria.\n";
+        std::cout << "El volumen aún no ha sido cargado en memoria.\n";
         return;
     }
+
     if (volumen.getLista().empty()) {
         std::cerr << "Error: La lista de volumen está vacía.\n";
         return;
     }
 
-    /*auto primeraImagen = volumen.getLista().front();
-    auto primeraLista = primeraImagen.getLista().front();
-    std::cout << "Tamano de la primera lista en X: " << primeraLista.size() << std::endl;*/
-
     std::string direccion = argumentos[1];
     std::string criterio = argumentos[2];
     std::string nombreArchivo = argumentos[3];
 
-    if (criterio != "mediana" && criterio != "minimo" && criterio != "maximo" && criterio != "promedio"){
-        std::cout << "El Criterio ingresado no es valido.\n";
+    // Validar criterio
+    if (criterio != "minimo" && criterio != "maximo" && criterio != "promedio" && criterio != "mediana") {
+        std::cout << "Error: Criterio no valido. Use minimo, maximo, promedio, o mediana.\n";
         return;
     }
+
+    // Validar dirección
+    if (direccion != "x" && direccion != "y" && direccion != "z") {
+        std::cout << "Error: Dirección no válida. Use x, y, o z.\n";
+        return;
+    }
+
+    // Obtener dimensiones del volumen
+    int ancho = volumen.getLista().front().getXTamano();
+    int alto = volumen.getLista().front().getYTamano();
+    int profundidad = volumen.getNImagenes();
+
+    // Estructura para almacenar la proyección 2D
     std::list<std::list<int>> proyeccion;
 
     if (direccion == "x") {
-        for (auto it = volumen.getLista().begin(); it != volumen.getLista().end(); ++it){ //Recorre la lista de imagenes que seria el eje z
+        // Proyección en X: Colapsar columnas (eje X)
+        for (int y = 0; y < alto; y++) {
             std::list<int> fila;
-            //std::cout << "Recorriendo el eje Z...\n";
-            for(auto it2 = it->getLista().begin(); it2 != it->getLista().end(); ++it2){ //Recorre la lista de listas de enteros, donde se guardan los pixeles en el eje y
-                /*std::cout << "Recorriendo el eje Y...\n";
-                std::cout << "Tamaño de la lista de enteros: " << it2->size() << "\n";*/
-                int minimo = 255;
-                int maximo = 0;
-                int promedio = 0;
-                if (criterio == "mediana"){
-                    std::vector<int> copia (it2->begin(),it2->end()); //Copia la lista de enteros en un vector copia
-                    sort(copia.begin(), copia.end());
-                    fila.push_back(copia[copia.size()/2]);
-                }else if (criterio == "minimo"){
-                    for(auto it3 = it2->begin(); it3 != it2->end(); ++it3){
-                        if(*it3 < minimo){ //Busca el minimo valor de la lista de enteros, que son los pixeles en x
-                            minimo = *it3;
-                        }
+            for (int z = 0; z < profundidad; z++) {
+                auto imagen = volumen.getLista().begin();
+                std::advance(imagen, z);
+                auto filaImagen = imagen->getLista().begin();
+                std::advance(filaImagen, y);
+
+                if (criterio == "minimo") {
+                    int minimo = 255;
+                    for (int valor : *filaImagen) {
+                        if (valor < minimo) minimo = valor;
                     }
-                    fila.push_back(minimo); //Proyecta el minimo valor de la lista de enteros, a lo que va a ser la primera fila de la proyeccion
-                } else if (criterio == "maximo"){
-                    for(auto it3 = it2->begin(); it3 != it2->end(); ++it3){
-                        if(*it3 > maximo){ //Busca el maximo valor de la lista de enteros, que son los pixeles en x
-                            maximo = *it3;
-                        }
+                    fila.push_back(minimo);
+                } else if (criterio == "maximo") {
+                    int maximo = 0;
+                    for (int valor : *filaImagen) {
+                        if (valor > maximo) maximo = valor;
                     }
-                    fila.push_back(maximo); //Proyecta el maximo valor de la lista de enteros, a lo que va a ser la primera fila de la proyeccion
-                }else if (criterio == "promedio"){
-                    for(auto it3 = it2->begin(); it3 != it2->end(); ++it3){
-                        promedio += *it3; //Suma todos los valores de la lista de enteros, que son los pixeles en x
+                    fila.push_back(maximo);
+                } else if (criterio == "promedio") {
+                    int suma = 0;
+                    for (int valor : *filaImagen) {
+                        suma += valor;
                     }
-                    promedio = promedio / it2->size(); //Divide la suma de los valores de la lista de enteros, que son los pixeles en x, entre el tamaño de la lista
-                    fila.push_back(promedio); //Proyecta el promedio de la lista de enteros, a lo que va a ser la primera fila de la proyeccion
-                } else {
-                    std::cout << "Error: Criterio no valido.\n";
-                    return;
+                    fila.push_back(suma / ancho);
+                } else if (criterio == "mediana") {
+                    std::vector<int> valores(filaImagen->begin(), filaImagen->end());
+                    std::sort(valores.begin(), valores.end());
+                    fila.push_back(valores[valores.size() / 2]);
                 }
             }
-            proyeccion.push_back(fila); //Agrega la fila a la proyeccion  
-            fila.clear();
+            proyeccion.push_back(fila);
         }
     } else if (direccion == "y") {
-        
-    } else if (direccion == "z") {
-        int minimo = 255;
-        std::list<int> fila;
-        std::list<int> lpp;
-        for (auto it = volumen.getLista().begin(); it != volumen.getLista().end(); ++it){ //Recorre la lista de imagenes que seria el eje z  
-            
-            
-        }
-        for(auto it = lpp.begin(); it != lpp.end(); ++it){
-            if(*it < minimo){
-                minimo = *it;
-            }
-        }
+        // Proyección en Y: Colapsar filas (eje Y)
+        for (int x = 0; x < ancho; x++) {
+            std::list<int> fila;
+            for (int z = 0; z < profundidad; z++) {
+                auto imagen = volumen.getLista().begin();
+                std::advance(imagen, z);
+                int suma = 0;
+                int minimo = 255;
+                int maximo = 0;
+                std::vector<int> valores;
 
-    } else {
-        std::cout << "Error: Dirección no válida.\n";
-        return;
+                for (auto filaImagen : imagen->getLista()) {
+                    auto it = filaImagen.begin();
+                    std::advance(it, x);
+                    int valor = *it;
+
+                    if (criterio == "minimo") {
+                        if (valor < minimo) minimo = valor;
+                    } else if (criterio == "maximo") {
+                        if (valor > maximo) maximo = valor;
+                    } else if (criterio == "promedio") {
+                        suma += valor;
+                    } else if (criterio == "mediana") {
+                        valores.push_back(valor);
+                    }
+                }
+
+                if (criterio == "minimo") {
+                    fila.push_back(minimo);
+                } else if (criterio == "maximo") {
+                    fila.push_back(maximo);
+                } else if (criterio == "promedio") {
+                    fila.push_back(suma / alto);
+                } else if (criterio == "mediana") {
+                    std::sort(valores.begin(), valores.end());
+                    fila.push_back(valores[valores.size() / 2]);
+                }
+            }
+            proyeccion.push_back(fila);
+        }
+    } else if (direccion == "z") {
+        // Proyección en Z: Colapsar profundidad (eje Z)
+        for (int y = 0; y < alto; y++) {
+            std::list<int> fila;
+            for (int x = 0; x < ancho; x++) {
+                int suma = 0;
+                int minimo = 255;
+                int maximo = 0;
+                std::vector<int> valores;
+
+                for (int z = 0; z < profundidad; z++) {
+                    auto imagen = volumen.getLista().begin();
+                    std::advance(imagen, z);
+                    auto filaImagen = imagen->getLista().begin();
+                    std::advance(filaImagen, y);
+                    auto it = filaImagen->begin();
+                    std::advance(it, x);
+                    int valor = *it;
+
+                    if (criterio == "minimo") {
+                        if (valor < minimo) minimo = valor;
+                    } else if (criterio == "maximo") {
+                        if (valor > maximo) maximo = valor;
+                    } else if (criterio == "promedio") {
+                        suma += valor;
+                    } else if (criterio == "mediana") {
+                        valores.push_back(valor);
+                    }
+                }
+
+                if (criterio == "minimo") {
+                    fila.push_back(minimo);
+                } else if (criterio == "maximo") {
+                    fila.push_back(maximo);
+                } else if (criterio == "promedio") {
+                    fila.push_back(suma / profundidad);
+                } else if (criterio == "mediana") {
+                    std::sort(valores.begin(), valores.end());
+                    fila.push_back(valores[valores.size() / 2]);
+                }
+            }
+            proyeccion.push_back(fila);
+        }
     }
 
+    // Guardar la proyección en un archivo PGM
     guardarPGM(proyeccion, nombreArchivo);
-    std::cout << "La proyección 2D del volumen en memoria ha sido generada y almacenada en el archivo " << nombreArchivo << ".\n";
+    std::cout << "La proyeccion 2D del volumen en memoria ha sido generada y almacenada en el archivo " << nombreArchivo << ".\n";
 }
 //Funcion para guardar la proyeccion en un archivo
 void guardarPGM(const std::list<std::list<int>>& proyeccion, const std::string& nombreArchivo) {
-    std::cout << "Intentando guardar el archivo: " << nombreArchivo << "\n";
+    //std::cout << "Intentando guardar el archivo: " << nombreArchivo << "\n";
     std::ofstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
         std::cerr << "La proyección 2D del volumen en memoria no ha podido ser generada.\n";

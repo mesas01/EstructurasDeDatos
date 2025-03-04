@@ -29,19 +29,19 @@ void Imagen::setMaxIntensidad(int maxIntensidad){
 void Imagen::setLista(std::list<std::list<int>> lista){
     this->lista = lista;
 }
-std::string Imagen::getNombre(){
+std::string Imagen::getNombre() const {
     return nombre;
 }
-std::string Imagen::getCodigo(){
+std::string Imagen::getCodigo() const {
     return codigo;
 }
-int Imagen::getXTamano(){
+int Imagen::getXTamano()const{
     return xTamano;
 }
-int Imagen::getYTamano(){
+int Imagen::getYTamano()const{
     return yTamano;
 }
-int Imagen::getMaxIntensidad(){
+int Imagen::getMaxIntensidad()const{
     return maxIntensidad;
 }
 const std::list<std::list<int>>& Imagen::getLista() const {

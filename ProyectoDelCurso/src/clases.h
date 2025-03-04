@@ -10,7 +10,7 @@
 
 #include <iostream>
 #include <list>
-class Imagen{
+class Imagen {
     private:
         std::string nombre;
         std::string codigo;
@@ -18,6 +18,7 @@ class Imagen{
         int yTamano;
         int maxIntensidad;
         std::list<std::list<int>> lista;
+    
     public:
         ~Imagen();
         void setNombre(std::string nombre);
@@ -26,13 +27,13 @@ class Imagen{
         void setYTamano(int yTamano);
         void setMaxIntensidad(int maxIntensidad);
         void setLista(std::list<std::list<int>> lista);
-        std::string getNombre();
-        std::string getCodigo();
-        int getXTamano();
-        int getYTamano();
-        int getMaxIntensidad();
-        const std::list<std::list<int>>& getLista() const;
-};
+        std::string getNombre() const;  // Método constante
+        std::string getCodigo() const;  // Método constante
+        int getXTamano() const;         // Método constante
+        int getYTamano() const;         // Método constante
+        int getMaxIntensidad() const;   // Método constante
+        const std::list<std::list<int>>& getLista() const;  // Método constante
+    };
 class Volumen{
     private:
         std::string nombre;
