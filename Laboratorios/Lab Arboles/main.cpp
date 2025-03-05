@@ -1,44 +1,49 @@
 /********************************************************
  Fecha: 04 de marzo de 2025
- Autores: Santiago MEsa
+ Autores: Santiago Mesa
  Materia: Estructura de Datos.
- Tema: Arboles binarios
+ Tema: Árboles binarios
  Pontificia Universidad Javeriana
  Archivo: main.cpp
+
  Para compilar: g++ main.cpp arbolBinario.cpp -o programa
-    *   ./programa
+     *   ./programa
 
-Tambien se puede compilar en linux con el comando:
-	*   make
-	*   ./programa
-
+ También se puede compilar en Linux con el comando:
+     *   make run
  ********************************************************/
 #include <iostream>
 #include "arbolBinario.h"
 using namespace std;
 
 int main(){
+    // Creación del árbol binario dinámicamente
+    btree *tree = new btree();
 
-	//btree tree;
-	btree *tree = new btree();
+    // Inserción de valores en el árbol binario
+    tree->insert(7);
+    tree->insert(3);
+    tree->insert(0);
+    tree->insert(5);
+    tree->insert(-3);
+    tree->insert(1);
+    tree->insert(4);
+    tree->insert(6);
+    tree->insert(20);    
+    tree->insert(15);
+    tree->insert(25);
+    tree->insert(30);
 
-	tree->insert(7);
-	tree->insert(3);
-	tree->insert(0);
-	tree->insert(5);
-	tree->insert(-3);
-	tree->insert(1);
-	tree->insert(4);
-	tree->insert(6);
-	tree->insert(20);	
-	tree->insert(15);
-	tree->insert(25);
-	tree->insert(30);
+    // Recorridos del árbol binario
+    cout << "Recorrido Preorder (DLR): ";
+    tree->preorder_print();
 
-	tree->preorder_print();
-	tree->inorder_print();
-	tree->postorder_print();
+    cout << "Recorrido Inorder (LDR): ";
+    tree->inorder_print();
 
-	delete tree;
+    cout << "Recorrido Postorder (LRD): ";
+    tree->postorder_print();
 
+    // Liberación de memoria
+    delete tree;
 }
