@@ -1,0 +1,14 @@
+# Ignorar archivos objeto y ejecutables
+*.o
+*.exe
+proyecto
+
+# Ignorar archivos generados por el IDE
+.vscode/
+.idea/
+
+# Ignorar archivos de respaldo
+*~
+# Ignorar el archivo ejecutable
+proyecto
+proyecto.bin
