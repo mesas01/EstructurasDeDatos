@@ -306,6 +306,7 @@ void proyeccion2D(const std::vector<std::string>& argumentos) {
     guardarPGM(proyeccion, nombreArchivo);
     std::cout << "La proyeccion 2D del volumen en memoria ha sido generada y almacenada en el archivo " << nombreArchivo << ".\n";
 }
+
 //Funcion para guardar la proyeccion en un archivo
 void guardarPGM(const std::list<std::list<int>>& proyeccion, const std::string& nombreArchivo) {
     //std::cout << "Intentando guardar el archivo: " << nombreArchivo << "\n";
@@ -324,6 +325,7 @@ void guardarPGM(const std::list<std::list<int>>& proyeccion, const std::string& 
     }
     archivo.close();
 }
+
 //Funcion para codificar imagenes
 void codificarImagen(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 2) {
@@ -332,6 +334,7 @@ void codificarImagen(const std::vector<std::string>& argumentos) {
     }
     std::cout << "La imagen ha sido codificada y almacenada en " << argumentos[1] << ".\n";
 }
+
 //Funcion para decodificar un archivo
 void decodificarArchivo(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 3) {
@@ -340,6 +343,7 @@ void decodificarArchivo(const std::vector<std::string>& argumentos) {
     }
     std::cout << "El archivo " << argumentos[1] << " ha sido decodificado y almacenado en " << argumentos[2] << ".\n";
 }
+
 //Funcion para segmentar 
 void segmentar(const std::vector<std::string>& argumentos) {
     if (argumentos.size() < 3) {
