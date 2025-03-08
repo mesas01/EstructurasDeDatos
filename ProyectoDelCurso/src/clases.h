@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include <list>
+
+//Clase Imagen
 class Imagen {
     private:
         std::string nombre;
@@ -34,6 +36,8 @@ class Imagen {
         int getMaxIntensidad() const;   // Método constante
         const std::list<std::list<int>>& getLista() const;  // Método constante
     };
+
+//Clase Volumen
 class Volumen{
     private:
         std::string nombre;

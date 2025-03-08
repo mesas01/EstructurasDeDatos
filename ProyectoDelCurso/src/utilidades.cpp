@@ -7,6 +7,7 @@
  ***********************************************/
 #include <sstream>
 #include "utilidades.h"
+
 //Funcion para dividir las palabras de un string en un arreglo
 std::vector<std::string> dividirComando(const std::string& comando) {
     std::vector<std::string> partes;

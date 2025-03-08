@@ -7,6 +7,7 @@
  ***********************************************/
 #include <iostream>
 #include "interfaz.h"
+
 //Funcion para la bienvenida del usuario
 void mostrarBienvenida() {
     std::cout << "=========================================\n";
@@ -24,6 +25,7 @@ void mostrarBienvenida() {
     std::cout << "||                                     ||\n";
     std::cout << "=========================================\n\n";
 }
+
 //Funcion para el comando ayuda
 void ayuda() {
     std::cout << "===================================================\n";

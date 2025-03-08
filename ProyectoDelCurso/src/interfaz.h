@@ -9,6 +9,7 @@
 #define INTERFAZ_H
 
 #include <string>
+
 //Funciones para la interaccion del usuario
 void mostrarBienvenida();
 void ayuda();

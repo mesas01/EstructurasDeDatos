@@ -9,11 +9,13 @@
 #include "comandos.h"
 #include "clases.h"
 #include <fstream>
+
 /*Creamos una clase de tipo Imagen*/
 Imagen imagen;
 bool cargadaI = false;
 Volumen volumen;
 bool cargadaV = false;
+
 /*Funcion que veifica si el archivo existe*/
 bool archivoExiste(const std::string& nombreArchivo) {
     std::ifstream archivo(nombreArchivo);
@@ -69,6 +71,7 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     }
     std::cout << "La imagen " << argumentos[1] << " ha sido cargada.\n";
 }
+
 /*Funcion para cargar un volumen*/
 void cargarVolumen(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 3) {
@@ -118,6 +121,7 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
     volumen.setNImagenes(nImagenes);
     volumen.setLista(lImagenes);
 }
+
 //Funcion para mostrar la informacion de la imagen cargada en memoria
 void infoImagen() {
     if(!cargadaI){
@@ -134,6 +138,7 @@ void infoVolumen() {
     }
     std::cout << "Volumen cargado en memoria: " << volumen.getNombre() << ", Tamano: " << volumen.getNImagenes() << ".\n";
 }
+
 //funcion para la proyeccion 2D
 void proyeccion2D(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 4) {
