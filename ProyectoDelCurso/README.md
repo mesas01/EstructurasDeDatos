@@ -47,11 +47,11 @@ El proyecto sigue una estructura modular, con los siguientes archivos principale
 
 📌 **Descripción de los módulos:**
 
-- 📦 `` → Definen la estructura de las imágenes y volúmenes.
-- 🎮 `` → Contienen la lógica de ejecución de comandos.
-- 💻 `` → Controlan la interacción con el usuario en la terminal.
-- 🔧 `` → Incluyen funciones auxiliares como el manejo de cadenas.
-- 🚀 `` → Punto de entrada que gestiona la ejecución de comandos.
+- 📦  → Definen la estructura de las imágenes y volúmenes.
+- 🎮  → Contienen la lógica de ejecución de comandos.
+- 💻  → Controlan la interacción con el usuario en la terminal.
+- 🔧  → Incluyen funciones auxiliares como el manejo de cadenas.
+- 🚀  → Punto de entrada que gestiona la ejecución de comandos.
 
 ---
 
