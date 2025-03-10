@@ -10,7 +10,7 @@
 #include "clases.h"
 #include <fstream>
 
-/*Creamos una clase de tipo Imagen*/
+/*Variables Globales*/
 Imagen imagen;
 bool cargadaI = false;
 Volumen volumen;
@@ -47,11 +47,11 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     imagen.setYTamano(yTamano);
     imagen.setMaxIntensidad(maxIntensidad);
 
-    // Leer los píxeles y almacenarlos en la lista de listas
+    // Leer los píxeles y almacenarlos en la lista de listas de imagenes
     std::list<std::list<int>> listaPixeles;
     for (int y = 0; y < yTamano; ++y) {
         std::list<int> fila;
-        for (int x = 0; x < xTamano; ++x) { // *3 porque cada píxel tiene R, G y B
+        for (int x = 0; x < xTamano; ++x) {
             int valor;
             archivo >> valor;
             fila.push_back(valor);
@@ -89,7 +89,7 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
     if (ultimos22.size() > 15) {
         ultimos22.erase(ultimos22.size() - 4, 4); // Elimina los últimos 4 caracteres
     }else {
-        ultimos22.erase(ultimos22.size() - 3, 3); // Elimina los últimos 4 caracteres
+        ultimos22.erase(ultimos22.size() - 3, 3); // Elimina los últimos 3 caracteres
     }
     for (int i= 1; i <= nImagenes; i++) {
         //std::cout << "Valor de i: " << i << std::endl;
