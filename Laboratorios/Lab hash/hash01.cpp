@@ -1,3 +1,15 @@
+/********************************************************
+ Fecha: 12 de marzo de 2025
+ Autores: santiago mesa
+ Materia: Estructura de Datos.
+ Tema: Tablas Hash
+ Pontificia Universidad Javeriana
+ Archivo: hash01.cpp
+
+ Para compilar: g++ hash01.cpp -o programa
+     *   ./programa
+ ********************************************************/
+
 #include <iostream>
 #include <list>
 
