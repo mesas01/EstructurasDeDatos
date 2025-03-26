@@ -1,0 +1,41 @@
+TAD ArbolBinarioG
+Datos Minimos:
+    raiz,NodoBinario, senala al primer nodo del arbol binario.
+Comportamiento:
+    ArbolBinarioG(),
+    getRaiz(),NodoBinario, retorna el nodoBinario correspondiente a la raiz del Arbol.
+    esVacio(), retorna verdadero si el arbol no posee nodo raiz.
+    datoRaiz(),?, retorna el contenido de la raiz.
+    altura(),entero, retorna la altura del arbol.
+    tamano(),entero, retorna el numero de nodos que posee el arbol.
+    insertar(valor),inserta un valor en el arbol siguiendo los parametros de orden.
+    altura(subarbol),entero, retorna la altura de un subarbol que es enviado por parametro.
+    tamano(subarbol),entero, retorna el numero de nodos que posee un subarbol que es enviado por parametro.
+    insertar(valor,subarbol,pos),ingresa un nodoBinario de valor "valor", al subarbol en la posicion indicada, i para hijo izquierdo, d para derecho.
+    eliminar(valor),busca un valor en el arbol y lo elimina.
+    buscar(valor), busca un valor en el arbol y retorna el apuntador si lo encuentra.
+    buscarE(valor), busca un valor en el arbol y retorna el apuntador a su padre.
+    preOrden(subarbol), realiza la impresion preorden de un subarbol
+    inOrden(subarbol), realiza la impresion Inorden de un subarbol
+    posOrden(subarbol), realiza la impresion posOrden de un subarbol
+    nivelOrden(subarbol), realiza la impresion NivelOrden de un subarbol
+    preOrden(), realiza la impresion preorden del arbol
+    inOrden(), realiza la impresion preorden del arbol
+    posOrden(), realiza la impresion preorden del arbol
+    nivelOrden(), realiza la impresion preorden del arbol
+
+TAD NodoBinario
+Datos Minimos:
+    dato,T, posee el contenido del nodo
+    Izq, NodoBinario,apuntador hacia el hijo izquierdo
+   Dere, NodoBinario,apuntador hacia el hijo derecho
+Comportamiento:
+    NodoBinario(dato),crea un nodo binario e inicializa su dato con el dato enviado por parametro.
+    NodoBinario()crea un nodo binario vacio.
+//Setters y Getters
+    obtenerDato()
+    fijarDato( val) 
+    obtenerHijoIzq()
+    obtenerHijoDer()
+    fijarHijoIzq(izq)
+   fijarHijoDer(der)
