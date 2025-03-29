@@ -1,10 +1,10 @@
 /********************************************************
  Fecha: 23 de marzo de 2025
- Autores: Jeronimo Chaparro Tenorio.
+ Autores: Jeronimo Chaparro Tenorio, Santiago Mesa.
  Materia: Estructura de Datos.
  Tema: Taller 3
  Pontificia Universidad Javeriana
- Archivo: kdtree.h
+ Archivo: arbol.h
  ********************************************************/
 #ifndef __KDTREE__H__
 #define __KDTREE__H__

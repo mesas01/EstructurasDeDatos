@@ -1,10 +1,10 @@
 /********************************************************
  Fecha: 23 de marzo de 2025
- Autores: Jeronimo Chaparro Tenorio.
+ Autores: Jeronimo Chaparro Tenorio, Santiago Mesa.
  Materia: Estructura de Datos.
  Tema: Taller 3
  Pontificia Universidad Javeriana
- Archivo: quadtree.h
+ Archivo: arbol.h
  ********************************************************/
 #ifndef __QUADTREE__H__
 #define __QUADTREE__H__

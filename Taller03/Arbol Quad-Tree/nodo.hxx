@@ -1,10 +1,10 @@
 /********************************************************
  Fecha: 23 de marzo de 2025
- Autores: Jeronimo Chaparro Tenorio.
+ Autores: Jeronimo Chaparro Tenorio, Santiago Mesa.
  Materia: Estructura de Datos.
  Tema: Taller 3
  Pontificia Universidad Javeriana
- Archivo: nodo.hxx
+ Archivo: arbol.h
  ********************************************************/
 #include "Nodo.h"
 #include <bits/stdc++.h>
