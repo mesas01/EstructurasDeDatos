@@ -98,8 +98,8 @@ void Arbol<T>:: posOrden(){
 
 //Función para recorrer el árbol en nivelOrden
 template<class T>
-void Arbol<T>:: nivelOrden(){
+void Arbol<T>::nivelOrden(){
     for (int i = 0; i <= this->altura(); i++) {
         this->raiz->nivelOrden(i, 0);
-    }    
+    }
 }

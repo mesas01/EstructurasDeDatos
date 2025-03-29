@@ -43,7 +43,7 @@ class Nodo{
     //Función para recorrer el árbol en posOrden
     void posOrden();
     //Función para recorrer el árbol en nivelOrden
-    void nivelOrden(std::queue<Nodo*> &cola);
+    void nivelOrden(int nivel, int lvActual);
     //Función para buscar un valor
     Nodo* buscar(T val);
 };

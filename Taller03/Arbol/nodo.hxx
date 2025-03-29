@@ -152,5 +152,3 @@ void Nodo<T>::nivelOrden(int nivel, int lvActual){
         hijos[i].nivelOrden(nivel, lvActual + 1);
     }
 }
-
-

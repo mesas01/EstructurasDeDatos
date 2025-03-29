@@ -15,5 +15,6 @@ int main(){
         arbol.insertarNodo(6,10);
         arbol.insertarNodo(7,11);
 
-        arbol.nivelOrden();
+        //arbol.nivelOrden();
+        arbol.posOrden();
 }
