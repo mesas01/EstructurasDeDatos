@@ -74,23 +74,23 @@ bool ArbolBinario<T>::eliminar(T& val)
 { 
 	//Nodo* borrar = this->buscar(val);
 	NodoBinario<T>* borrar = this->buscar(val);
-    if(borrar == NULL)
+    if(borrar == NULL){
         return false;
-
-    if(borrar->hijoIzq != NULL)
-    {
-        //Nodo* nuevo = borrar->hijoIzq->extremo_der();
-		NodoBinario<T>* nuevo = borrar->hijoIzq->extremo_der();
-        borrar->fijarDato(nuevo->obtenerDato());
-		delete(nuevo);
     }
-    else if(borrar->hijoDer != NULL)
-    {
-		
-        //Nodo* nuevo = borrar->hijoDer->extremo_izq();
-		NodoBinario<T>* nuevo = borrar->hijoDer->extremo_izq();
+        
+
+    if(borrar->obtenerHijoIzq() != NULL){
+        //Nodo* nuevo = borrar->hijoIzq->extremo_der();
+		NodoBinario<T>* nuevo = borrar->obtenerHijoIzq()->extremo_der();
         borrar->fijarDato(nuevo->obtenerDato());
-		delete(nuevo);
+		//delete(nuevo);
+    }
+
+    else if(borrar->obtenerHijoDer() != NULL){	
+        //Nodo* nuevo = borrar->hijoDer->extremo_izq();
+		NodoBinario<T>* nuevo = borrar->obtenerHijoDer()->extremo_izq();
+        borrar->fijarDato(nuevo->obtenerDato());
+		//delete(nuevo);
     }
     return true;
 }

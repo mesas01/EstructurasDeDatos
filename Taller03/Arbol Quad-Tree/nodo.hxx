@@ -259,17 +259,18 @@ template<class T>
 void Nodo<T>:: posOrden()
 {
     if(this->NW !=NULL)
-        this->NW->preOrden();
+        this->NW->posOrden();  // corregido
     if(this->NE !=NULL)
-        this->NE->preOrden();
+        this->NE->posOrden();  // corregido
     if(this->SW !=NULL)
-        this->SW->preOrden();
+        this->SW->posOrden();  // corregido
     if(this->SE !=NULL)
-        this->SE->preOrden();
+        this->SE->posOrden();  // corregido
+
     cout << "("<<this->dato.first<<','<<this->dato.second <<")"<< endl;
     return;
-
 }
+
 
 
 

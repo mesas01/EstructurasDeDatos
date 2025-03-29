@@ -24,7 +24,7 @@ class kdnodo
     //Contructor
   	kdnodo();
     //Geters y Seters
-    T& obtenerDato();
+    vector<T>& obtenerDato();
     void fijarDato(vector<T>& val);
     kdnodo<T>* obtenerHijoIzq();
     kdnodo<T>* obtenerHijoDer();

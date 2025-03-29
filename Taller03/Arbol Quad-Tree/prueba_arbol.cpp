@@ -12,7 +12,7 @@
 
 using namespace std;
 
-int main(){
+int main(int argc, char* argv[]){
     Arbol<int> arbol;
     pair<int, int> a = {5, 4};
     pair<int, int> b = {3, 2};
@@ -20,13 +20,18 @@ int main(){
     pair<int, int> d = {8, 7};
     pair<int, int> e = {1, 2};
     pair<int, int> f = {9, 5};
-		arbol.insertar(a);
-		arbol.insertar(b);
-		arbol.insertar(c);
-		arbol.insertar(d);
-		arbol.insertar(e);
-		arbol.insertar(f);
 
+	arbol.insertar(a);
+	arbol.insertar(b);
+	arbol.insertar(c);
+	arbol.insertar(d);
+	arbol.insertar(e);
+	arbol.insertar(f);
+
+	cout<<"Pre Orden: "<<endl;
+	arbol.preOrden();
+	cout<<endl;
+	
 	cout<<endl;
 	cout<<"Pos Orden: "<<endl;
 	arbol.posOrden();

@@ -12,9 +12,8 @@
 using namespace std;
 //Construcotres
 template<class T>
-Arbol<T>::Arbol()
-{
-    Nodo<T>* root = NULL;
+Arbol<T>::Arbol(){
+    this->raiz = NULL;
 }
 
 template<class T>
@@ -64,9 +63,12 @@ int Arbol<T>:: tamano()
 }
 //Función para insertar un nodo
 template<class T>
-void Arbol<T>:: insertar(pair<T,T> val)
-{
-    this->raiz->insertar(val);
+void Arbol<T>::insertar(pair<T,T> val){
+    if (this->raiz == NULL) {
+        this->raiz = new Nodo<T>(val);
+    } else {
+        this->raiz->insertar(val);
+    }
 }
 
 //Función para buscar un valor
