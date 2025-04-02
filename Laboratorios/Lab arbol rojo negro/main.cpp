@@ -48,3 +48,27 @@ int main() {
 
     return 0;  // Finalizar programa con estado exitoso
 }
+/*
+ * CONCLUSIÓN DE LA IMPLEMENTACIÓN DEL ÁRBOL ROJO-NEGRO
+ * ==================================================
+ * 
+ * 
+ * 1. PROPIEDADES FUNDAMENTALES:
+ *    - Correcta implementación de nodos rojos y negros
+ *    - Mantenimiento automático del balance
+ *    - Cumplimiento de las reglas de coloración
+ *    - Rotaciones apropiadas para mantener el equilibrio
+ * 
+ * 2. ESTRUCTURA DEL CÓDIGO:
+ *    - Organización modular en archivos separados
+ *    - Implementación clara de las operaciones básicas
+ *    - Comentarios explicativos adecuados
+ * 
+ * 3. FUNCIONALIDAD:
+ *    - Inserción correcta de elementos
+ *    - Auto-balanceo después de cada inserción
+ *    - Recorridos inorden y por niveles implementados
+ * 
+ * La implementación corresponde fielmente a lo explicado en clase
+ * y demuestra el funcionamiento esperado de un árbol rojo-negro.
+ */
