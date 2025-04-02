@@ -35,8 +35,12 @@ void Nodo<T>::fijarDato(T& val){
 //Función para obtener la altura del nodo
 template<class T>
 int Nodo<T>::altura(){
+<<<<<<< HEAD
 	if(hijos.size()==0)
 	{
+=======
+	if(hijos.size()==0)	{
+>>>>>>> 283cc41 (Implement Red-Black Tree insertion and update Arbol and Nodo classes for improved functionality)
 		return 0;
 	}
 	int maximo = 0, aux_altura;
@@ -133,9 +137,15 @@ void Nodo<T>:: preOrden(){
 
 //Función para recorrer el árbol en posOrden
 template<class T>
+<<<<<<< HEAD
 void Nodo<T>::posOrden(){
 	for(int i = 0; i < hijos.size(); i++){
         hijos[i].posOrden();
+=======
+void Nodo<T>:: posOrden(){
+	for(int i = 0; i < hijos.size() ; i++){
+        hijos[i].preOrden();
+>>>>>>> 283cc41 (Implement Red-Black Tree insertion and update Arbol and Nodo classes for improved functionality)
 	}
 	cout << "\t" << this->obtenerDato() << endl;
 }

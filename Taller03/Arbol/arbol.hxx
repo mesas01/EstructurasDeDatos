@@ -98,8 +98,13 @@ void Arbol<T>:: posOrden(){
 
 //Función para recorrer el árbol en nivelOrden
 template<class T>
+<<<<<<< HEAD
 void Arbol<T>::nivelOrden(){
     for (int i = 0; i <= this->altura(); i++) {
         this->raiz->nivelOrden(i, 0);
     }
+=======
+void Arbol<T>:: nivelOrden(){
+    this->raiz->nivelOrden();
+>>>>>>> 283cc41 (Implement Red-Black Tree insertion and update Arbol and Nodo classes for improved functionality)
 }
