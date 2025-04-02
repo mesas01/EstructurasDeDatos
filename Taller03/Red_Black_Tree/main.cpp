@@ -1,10 +1,10 @@
 /********************************************************
- Fecha: 18 de marzo de 2025
-
+ Fecha: 23 de marzo de 2025
+ Autores: Jeronimo Chaparro Tenorio, Santiago Mesa.
  Materia: Estructura de Datos.
- Tema: Arboles Red-Black
+ Tema: Taller 3
  Pontificia Universidad Javeriana
- Archivo: main.cpp
+ Archivo: arbol.h
  ********************************************************/
 
 #include <iostream>
@@ -30,6 +30,16 @@ int main() {
     tree.remove(45);
     std::cout << "\nAfter deleting node 5:" << std::endl;
     tree.printTree();
+
+    std::cout << "\nInOrder: ";
+    tree.inOrderTraversal();
+
+    std::cout << "PreOrder: ";
+    tree.preOrderTraversal();
+
+    std::cout << "PostOrder: ";
+    tree.postOrderTraversal();
+
 
     return 0;
 }
