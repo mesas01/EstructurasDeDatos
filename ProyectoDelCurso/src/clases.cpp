@@ -102,4 +102,48 @@
  const std::list<Imagen>& Volumen::getLista() const {
      return lista;
  }
+
+//nodos del árbol de huffman
+HuffmanNode::HuffmanNode(unsigned char p, unsigned long f) : pixel(p), freq(f), left(nullptr), right(nullptr) {}
+
+bool Compare::operator()(HuffmanNode* a, HuffmanNode* b) {
+    return a->freq > b->freq;
+}
+
+HuffmanTree::HuffmanTree(const vector<unsigned long>& freq) {
+    priority_queue<HuffmanNode*, vector<HuffmanNode*>, Compare> pq;
+    for (int i = 0; i < freq.size(); i++) {
+        if (freq[i] > 0)
+            pq.push(new HuffmanNode(i, freq[i]));
+    }
+    
+    while (pq.size() > 1) {
+        HuffmanNode* left = pq.top(); pq.pop();
+        HuffmanNode* right = pq.top(); pq.pop();
+        HuffmanNode* newNode = new HuffmanNode(0, left->freq + right->freq);
+        newNode->left = left;
+        newNode->right = right;
+        pq.push(newNode);
+    }
+    
+    root = pq.top();
+    buildCodes(root, "");
+}
+
+void HuffmanTree::buildCodes(HuffmanNode* node, string code) {
+    if (!node) return;
+    if (!node->left && !node->right) {
+        huffmanCodes[node->pixel] = code;
+    }
+    buildCodes(node->left, code + "0");
+    buildCodes(node->right, code + "1");
+}
+
+map<unsigned char, string> HuffmanTree::getCodes() {
+    return huffmanCodes;
+}
+
+HuffmanNode* HuffmanTree::getRoot() {
+    return root;
+}
  

@@ -15,6 +15,13 @@
  
  #include <iostream>
  #include <list>
+ #include <vector>
+ #include <queue>
+ #include <map>
+ #include <bitset>
+
+ 
+ using namespace std;
  
  /**
   * Clase Imagen
@@ -72,6 +79,37 @@
          int getNImagenes();       // Devuelve la cantidad de imágenes en el volumen
          const std::list<Imagen>& getLista() const;  // Devuelve la lista de imágenes
  };
+
+ //Estructura nodo de Huffman
+ struct HuffmanNode {
+    unsigned char pixel;
+    unsigned long freq;
+    HuffmanNode *left, *right;
+    HuffmanNode(unsigned char p, unsigned long f);
+};
+
+//Estructura para comparar nodos de Huffman
+struct Compare {
+    bool operator()(HuffmanNode* a, HuffmanNode* b);
+};
+
+//Clase árbol de Huffman
+class HuffmanTree {
+private:
+    //Raiz
+    HuffmanNode* root;
+    //Mapa para almacenar los códigos de Huffman
+    map<unsigned char, string> huffmanCodes;
+    //Función para la construcción de los códigos de cada pixel
+    void buildCodes(HuffmanNode* node, string code);
+
+public:
+    //Constructor
+    HuffmanTree(const vector<unsigned long>& freq);
+    //Getters
+    map<unsigned char, string> getCodes();
+    HuffmanNode* getRoot();
+};
  
  #endif
  

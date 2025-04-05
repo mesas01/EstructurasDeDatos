@@ -10,11 +10,14 @@
 #include "clases.h"
 #include <fstream>
 
-/*Variables Globales*/
+using namespace std;
+/*Creamos una clase de tipo Imagen*/
 Imagen imagen;
 bool cargadaI = false;
 Volumen volumen;
 bool cargadaV = false;
+
+
 
 /*Funcion que veifica si el archivo existe*/
 bool archivoExiste(const std::string& nombreArchivo) {
@@ -47,11 +50,11 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     imagen.setYTamano(yTamano);
     imagen.setMaxIntensidad(maxIntensidad);
 
-    // Leer los píxeles y almacenarlos en la lista de listas de imagenes
+    // Leer los píxeles y almacenarlos en la lista de listas
     std::list<std::list<int>> listaPixeles;
     for (int y = 0; y < yTamano; ++y) {
         std::list<int> fila;
-        for (int x = 0; x < xTamano; ++x) {
+        for (int x = 0; x < xTamano; ++x) { // *3 porque cada píxel tiene R, G y B
             int valor;
             archivo >> valor;
             fila.push_back(valor);
@@ -89,7 +92,7 @@ void cargarVolumen(const std::vector<std::string>& argumentos) {
     if (ultimos22.size() > 15) {
         ultimos22.erase(ultimos22.size() - 4, 4); // Elimina los últimos 4 caracteres
     }else {
-        ultimos22.erase(ultimos22.size() - 3, 3); // Elimina los últimos 3 caracteres
+        ultimos22.erase(ultimos22.size() - 3, 3); // Elimina los últimos 4 caracteres
     }
     for (int i= 1; i <= nImagenes; i++) {
         //std::cout << "Valor de i: " << i << std::endl;
@@ -332,6 +335,60 @@ void codificarImagen(const std::vector<std::string>& argumentos) {
         std::cout << "Error: Uso correcto -> codificar_imagen <nombre_archivo.pgm>\n";
         return;
     }
+    if (!cargadaI) {
+        std::cout << "Error: No hay ninguna imagen cargada en memoria.\n";
+        return;
+    }
+    
+    vector<unsigned long> freq(256, 0);
+    for (const auto& fila : imagen.getLista()) {
+        for (int valor : fila) {
+            freq[valor]++;
+        }
+    }
+    HuffmanTree tree(freq);
+    map<unsigned char, string> codes = tree.getCodes();
+    vector<unsigned char> pixels; //(imagen.getXTamano() * imagen.getYTamano());
+
+    unsigned short xTamano = static_cast<unsigned short>(imagen.getXTamano());
+    unsigned short yTamano = static_cast<unsigned short>(imagen.getYTamano());
+    unsigned short maxIntensidad = static_cast<unsigned short>(imagen.getMaxIntensidad());
+    
+    ofstream out(argumentos[1], ios::binary);
+    out.write(reinterpret_cast<char*>(&xTamano), sizeof(unsigned short));
+    out.write(reinterpret_cast<char*>(&yTamano), sizeof(unsigned short));
+    out.write(reinterpret_cast<char*>(&maxIntensidad), sizeof(unsigned short));
+    for (int i = 0; i <= imagen.getMaxIntensidad(); i++) {
+        out.write(reinterpret_cast<char*>(&freq[i]), sizeof(unsigned long));
+    }
+
+    string bitStream;
+    for(auto it = imagen.getLista().begin(); it != imagen.getLista().end(); ++it) {
+        for (int valor : *it) {
+            pixels.push_back(static_cast<unsigned char>(valor));
+        }
+    }
+    for (unsigned char pixel : pixels) {
+        bitStream += codes[pixel];
+    }
+    
+    // Contar los bits válidos en el bitStream antes de agregar ceros extra
+    size_t numBitsValidos = bitStream.size();
+
+    while (bitStream.size() % 8 != 0) {
+        bitStream += "0";
+    }
+
+    for (size_t i = 0; i < bitStream.size(); i += 8) {
+        bitset<8> byte(bitStream.substr(i, 8));
+        unsigned char byteVal = static_cast<unsigned char>(byte.to_ulong());
+        out.write(reinterpret_cast<char*>(&byteVal), sizeof(unsigned char));
+    }
+
+    // Guardar el número de bits válidos al final del archivo
+    out.write(reinterpret_cast<char*>(&numBitsValidos), sizeof(size_t));
+    
+    out.close();
     std::cout << "La imagen ha sido codificada y almacenada en " << argumentos[1] << ".\n";
 }
 
@@ -341,6 +398,85 @@ void decodificarArchivo(const std::vector<std::string>& argumentos) {
         std::cout << "Error: Uso correcto -> decodificar_archivo <nombre_archivo.pgm> <nombre_imagen.pgm>\n";
         return;
     }
+    ifstream in(argumentos[1], ios::binary);
+    if (!in) {
+        cerr << "El archivo" << argumentos[1] << "no ha podido ser decodificado." << endl;
+        return;
+    }
+    
+    unsigned short xTamano, yTamano;
+    unsigned short maxIntensidad;
+    in.read(reinterpret_cast<char*>(&xTamano), sizeof(unsigned short));
+    in.read(reinterpret_cast<char*>(&yTamano), sizeof(unsigned short));
+    in.read(reinterpret_cast<char*>(&maxIntensidad), sizeof(unsigned char));
+    
+    vector<unsigned long> freq(256, 0);
+    for (int i = 0; i <= maxIntensidad; i++) {
+        in.read(reinterpret_cast<char*>(&freq[i]), sizeof(unsigned long));
+    }
+
+    bool freqValida = false;
+    for (auto f : freq) {
+        if (f > 0) {
+            freqValida = true;
+            break;
+        }
+    }
+    if (!freqValida) {
+        cerr << "Error: No se pudo reconstruir el árbol de Huffman.\n";
+        return;
+    }
+    
+    HuffmanTree tree(freq);
+    HuffmanNode* root = tree.getRoot();
+    HuffmanNode* current = root;
+    
+    vector<unsigned char> pixels;
+    // Leer todos los bytes del archivo
+    vector<unsigned char> bytes;
+    char byte;
+    while (in.read(&byte, sizeof(char))) {
+        bytes.push_back(static_cast<unsigned char>(byte));
+    }
+
+    // Leer el número de bits válidos que fue guardado al final
+    size_t numBitsValidos;
+    if (bytes.size() < sizeof(size_t)) {
+        cerr << "Error: Archivo corrupto o incompleto.\n";
+        return;
+    }
+    memcpy(&numBitsValidos, &bytes[bytes.size() - sizeof(size_t)], sizeof(size_t));
+    bytes.resize(bytes.size() - sizeof(size_t));
+
+    // Eliminar los bytes usados para guardar `numBitsValidos`
+    bytes.resize(bytes.size() - sizeof(size_t));
+
+    // Convertir bytes a un string binario
+    string bitStream;
+    for (unsigned char b : bytes) {
+        bitStream += bitset<8>(b).to_string();
+    }
+
+    // Recortar el bitStream para que tenga solo los bits válidos
+    bitStream = bitStream.substr(0, numBitsValidos);
+    in.close();
+    
+    for (char bit : bitStream) {
+        if (bit == '0') current = current->left;
+        else current = current->right;
+        
+        if (!current->left && !current->right) {
+            pixels.push_back(current->pixel);
+            current = root;
+        }
+    }
+    
+    ofstream out(argumentos[2]);
+    out << "P3\n" << xTamano << " " << yTamano << "\n" << (int)maxIntensidad << "\n";
+    for (unsigned char pixel : pixels) {
+        out << (int)pixel << " ";
+    }
+    out.close();    
     std::cout << "El archivo " << argumentos[1] << " ha sido decodificado y almacenado en " << argumentos[2] << ".\n";
 }
 
