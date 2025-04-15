@@ -2,7 +2,7 @@
 CXX = g++
 
 # Opciones de compilación
-CXXFLAGS = -Wall -Wextra -std=c++17 -g  # Agregamos -g para depuración
+CXXFLAGS = -Wall -Wextra -std=c++17 -g
 
 # Nombre del ejecutable
 TARGET = programa.exe
@@ -18,12 +18,10 @@ OBJS = $(SRCS:.cpp=.o)
 
 # Detectar el sistema operativo
 ifeq ($(OS), Windows_NT)
-    # Comandos para Windows
     RM = del /Q
     FIXPATH = $(subst /,\,$1)
     EXECUTABLE = $(TARGET)
 else
-    # Comandos para Linux
     RM = rm -f
     FIXPATH = $1
     EXECUTABLE = ./$(TARGET)
@@ -34,7 +32,8 @@ all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
-	$(RM) $(call FIXPATH, $(OBJS))  # Elimina los archivos objeto después de crear el ejecutable
+# Elimina los archivos objeto después de crear el ejecutable
+	$(RM) $(call FIXPATH, $(OBJS))
 
 # Regla para compilar cada archivo fuente
 %.o: %.cpp
@@ -42,7 +41,8 @@ $(TARGET): $(OBJS)
 
 # Regla para limpiar archivos generados
 clean:
-	$(RM) $(call FIXPATH, $(OBJS) $(TARGET))  # Elimina los archivos objeto y el ejecutable
+# Elimina los archivos objeto y el ejecutable
+	$(RM) $(call FIXPATH, $(OBJS) $(TARGET))
 
 # Regla para ejecutar el programa
 run: all

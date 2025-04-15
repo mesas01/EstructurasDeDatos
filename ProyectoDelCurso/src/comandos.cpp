@@ -9,6 +9,8 @@
 #include "comandos.h"
 #include "clases.h"
 #include <fstream>
+#include <cstring>
+
 
 using namespace std;
 /*Creamos una clase de tipo Imagen*/
@@ -27,16 +29,25 @@ bool archivoExiste(const std::string& nombreArchivo) {
 
 /*Funcion para cargar una imagen*/
 void cargarImagen(const std::vector<std::string>& argumentos) {
-    if (!archivoExiste(argumentos[1])) {
-        std::cout << "Error: El archivo no existe.\n";
-        return;
+    std::string ruta = argumentos[1];
+
+    // Si no existe, intentamos con ruta relativa desde src/imagenesPrueba
+    if (!archivoExiste(ruta)) {
+        std::string alternativa = "src/imagenesPrueba/" + ruta;
+        if (archivoExiste(alternativa)) {
+            ruta = alternativa;
+        } else {
+            std::cout << "Error: El archivo no existe.\n";
+            return;
+        }
     }
-    std::ifstream archivo(argumentos[1]);
+
+    std::ifstream archivo(ruta);
     if (!archivo.is_open()) {
         std::cerr << "Error: No se pudo abrir el archivo." << std::endl;
         return;
     }
-    //std::cout << "Se ha ingresado la imagen: " << argumentos[1] << ".\n";
+
     std::string codigo;
     int xTamano, yTamano, maxIntensidad;
 
@@ -44,7 +55,7 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     archivo >> codigo >> xTamano >> yTamano >> maxIntensidad;
 
     // Configurar el objeto Imagen
-    imagen.setNombre(argumentos[1]);
+    imagen.setNombre(ruta);
     imagen.setCodigo(codigo);
     imagen.setXTamano(xTamano);
     imagen.setYTamano(yTamano);
@@ -54,7 +65,7 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     std::list<std::list<int>> listaPixeles;
     for (int y = 0; y < yTamano; ++y) {
         std::list<int> fila;
-        for (int x = 0; x < xTamano; ++x) { // *3 porque cada píxel tiene R, G y B
+        for (int x = 0; x < xTamano; ++x) {
             int valor;
             archivo >> valor;
             fila.push_back(valor);
@@ -66,14 +77,14 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     cargadaI = true;
     archivo.close();
 
-    //std::cout << "Tamano de la lista en X: " << imagen.getLista().front().size() << std::endl;
-    //std::cout << "Tamano de la lista: " << imagen.getLista().size() << " yTamano: " << imagen.getYTamano() << std::endl;
-    if(imagen.getLista().size() != imagen.getYTamano()){
-        std::cout << "Error: El archivo no tiene el tamano correcto de Columnas.\n";
+    if (static_cast<int>(imagen.getLista().size()) != imagen.getYTamano()) {
+        std::cout << "Error: El archivo no tiene el tamaño correcto de filas.\n";
         return;
     }
-    std::cout << "La imagen " << argumentos[1] << " ha sido cargada.\n";
+
+    std::cout << "La imagen " << ruta << " ha sido cargada.\n";
 }
+
 
 /*Funcion para cargar un volumen*/
 void cargarVolumen(const std::vector<std::string>& argumentos) {
@@ -332,153 +343,171 @@ void guardarPGM(const std::list<std::list<int>>& proyeccion, const std::string& 
 //Funcion para codificar imagenes
 void codificarImagen(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 2) {
-        std::cout << "Error: Uso correcto -> codificar_imagen <nombre_archivo.pgm>\n";
+        std::cout << "Error: Uso correcto -> codificar_imagen <nombre_archivo.huf>\n";
         return;
     }
     if (!cargadaI) {
-        std::cout << "Error: No hay ninguna imagen cargada en memoria.\n";
+        std::cout << "Error: No hay una imagen cargada en memoria.\n";
         return;
     }
-    
-    vector<unsigned long> freq(256, 0);
+
+    // Paso 1: Obtener la lista de píxeles y contar frecuencias
+    std::vector<unsigned long> freq(256, 0);
+    std::vector<unsigned char> pixels;
+
     for (const auto& fila : imagen.getLista()) {
         for (int valor : fila) {
-            freq[valor]++;
+            unsigned char intensidad = static_cast<unsigned char>(valor);
+            freq[intensidad]++;
+            pixels.push_back(intensidad);
         }
     }
+
+    // Paso 2: Construir árbol de Huffman
     HuffmanTree tree(freq);
-    map<unsigned char, string> codes = tree.getCodes();
-    vector<unsigned char> pixels; //(imagen.getXTamano() * imagen.getYTamano());
+    std::map<unsigned char, std::string> codes = tree.getCodes();
 
-    unsigned short xTamano = static_cast<unsigned short>(imagen.getXTamano());
-    unsigned short yTamano = static_cast<unsigned short>(imagen.getYTamano());
-    unsigned short maxIntensidad = static_cast<unsigned short>(imagen.getMaxIntensidad());
-    
-    ofstream out(argumentos[1], ios::binary);
-    out.write(reinterpret_cast<char*>(&xTamano), sizeof(unsigned short));
-    out.write(reinterpret_cast<char*>(&yTamano), sizeof(unsigned short));
-    out.write(reinterpret_cast<char*>(&maxIntensidad), sizeof(unsigned short));
-    for (int i = 0; i <= imagen.getMaxIntensidad(); i++) {
-        out.write(reinterpret_cast<char*>(&freq[i]), sizeof(unsigned long));
-    }
-
-    string bitStream;
-    for(auto it = imagen.getLista().begin(); it != imagen.getLista().end(); ++it) {
-        for (int valor : *it) {
-            pixels.push_back(static_cast<unsigned char>(valor));
-        }
-    }
+    // Paso 3: Codificar todos los píxeles
+    std::string bitStream;
     for (unsigned char pixel : pixels) {
         bitStream += codes[pixel];
     }
-    
-    // Contar los bits válidos en el bitStream antes de agregar ceros extra
-    size_t numBitsValidos = bitStream.size();
 
+    // Guardar número de bits válidos antes de rellenar con ceros
+    size_t numBitsValidos = bitStream.size();
     while (bitStream.size() % 8 != 0) {
         bitStream += "0";
     }
 
+    // Paso 4: Escribir archivo binario
+    std::ofstream out(argumentos[1], std::ios::binary);
+    if (!out) {
+        std::cerr << "Error: No se pudo crear el archivo " << argumentos[1] << ".\n";
+        return;
+    }
+
+    unsigned short W = static_cast<unsigned short>(imagen.getXTamano());
+    unsigned short H = static_cast<unsigned short>(imagen.getYTamano());
+    unsigned char M = static_cast<unsigned char>(imagen.getMaxIntensidad());
+
+    out.write(reinterpret_cast<char*>(&W), sizeof(W));
+    out.write(reinterpret_cast<char*>(&H), sizeof(H));
+    out.write(reinterpret_cast<char*>(&M), sizeof(M));
+
+    for (int i = 0; i <= M; ++i) {
+        out.write(reinterpret_cast<char*>(&freq[i]), sizeof(unsigned long));
+    }
+
+    // Escribir stream de bits comprimido como bytes
     for (size_t i = 0; i < bitStream.size(); i += 8) {
-        bitset<8> byte(bitStream.substr(i, 8));
+        std::bitset<8> byte(bitStream.substr(i, 8));
         unsigned char byteVal = static_cast<unsigned char>(byte.to_ulong());
         out.write(reinterpret_cast<char*>(&byteVal), sizeof(unsigned char));
     }
 
-    // Guardar el número de bits válidos al final del archivo
+    // Escribir al final cuántos bits son válidos (para quitar los ceros añadidos)
     out.write(reinterpret_cast<char*>(&numBitsValidos), sizeof(size_t));
-    
     out.close();
-    std::cout << "La imagen ha sido codificada y almacenada en " << argumentos[1] << ".\n";
+
+    std::cout << "La imagen en memoria ha sido codificada exitosamente y almacenada en el archivo " << argumentos[1] << ".\n";
 }
+
 
 //Funcion para decodificar un archivo
 void decodificarArchivo(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 3) {
-        std::cout << "Error: Uso correcto -> decodificar_archivo <nombre_archivo.pgm> <nombre_imagen.pgm>\n";
+        std::cout << "Error: Uso correcto -> decodificar_archivo <nombre_archivo.huf> <nombre_imagen.pgm>\n";
         return;
     }
-    ifstream in(argumentos[1], ios::binary);
+
+    std::ifstream in(argumentos[1], std::ios::binary);
     if (!in) {
-        cerr << "El archivo" << argumentos[1] << "no ha podido ser decodificado." << endl;
+        std::cerr << "El archivo " << argumentos[1] << " no ha podido ser decodificado.\n";
         return;
     }
-    
-    unsigned short xTamano, yTamano;
-    unsigned short maxIntensidad;
-    in.read(reinterpret_cast<char*>(&xTamano), sizeof(unsigned short));
-    in.read(reinterpret_cast<char*>(&yTamano), sizeof(unsigned short));
-    in.read(reinterpret_cast<char*>(&maxIntensidad), sizeof(unsigned char));
-    
-    vector<unsigned long> freq(256, 0);
-    for (int i = 0; i <= maxIntensidad; i++) {
+
+    // Paso 1: Leer encabezado
+    unsigned short W, H;
+    unsigned char M;
+    in.read(reinterpret_cast<char*>(&W), sizeof(W));
+    in.read(reinterpret_cast<char*>(&H), sizeof(H));
+    in.read(reinterpret_cast<char*>(&M), sizeof(M));
+
+    // Paso 2: Leer frecuencias
+    std::vector<unsigned long> freq(256, 0);
+    for (int i = 0; i <= M; ++i) {
         in.read(reinterpret_cast<char*>(&freq[i]), sizeof(unsigned long));
     }
 
-    bool freqValida = false;
-    for (auto f : freq) {
-        if (f > 0) {
-            freqValida = true;
-            break;
-        }
+    // Paso 3: Leer todo el bloque de bytes restante
+    std::vector<unsigned char> bytes;
+    char b;
+    while (in.read(&b, sizeof(char))) {
+        bytes.push_back(static_cast<unsigned char>(b));
     }
-    if (!freqValida) {
-        cerr << "Error: No se pudo reconstruir el árbol de Huffman.\n";
+    in.close();
+
+    if (bytes.size() < sizeof(size_t)) {
+        std::cerr << "Error: Archivo corrupto o incompleto.\n";
         return;
     }
-    
+
+    // Paso 4: Separar el número de bits válidos del final
+    size_t numBitsValidos;
+    std::memcpy(&numBitsValidos, &bytes[bytes.size() - sizeof(size_t)], sizeof(size_t));
+    bytes.resize(bytes.size() - sizeof(size_t));
+
+    // Paso 5: Convertir bytes a bitstream
+    std::string bitStream;
+    for (unsigned char byte : bytes) {
+        bitStream += std::bitset<8>(byte).to_string();
+    }
+    bitStream = bitStream.substr(0, numBitsValidos);
+
+    // Paso 6: Reconstruir árbol de Huffman
     HuffmanTree tree(freq);
     HuffmanNode* root = tree.getRoot();
-    HuffmanNode* current = root;
-    
-    vector<unsigned char> pixels;
-    // Leer todos los bytes del archivo
-    vector<unsigned char> bytes;
-    char byte;
-    while (in.read(&byte, sizeof(char))) {
-        bytes.push_back(static_cast<unsigned char>(byte));
-    }
-
-    // Leer el número de bits válidos que fue guardado al final
-    size_t numBitsValidos;
-    if (bytes.size() < sizeof(size_t)) {
-        cerr << "Error: Archivo corrupto o incompleto.\n";
+    if (!root) {
+        std::cerr << "Error: No se pudo reconstruir el árbol de Huffman.\n";
         return;
     }
-    memcpy(&numBitsValidos, &bytes[bytes.size() - sizeof(size_t)], sizeof(size_t));
-    bytes.resize(bytes.size() - sizeof(size_t));
 
-    // Eliminar los bytes usados para guardar `numBitsValidos`
-    bytes.resize(bytes.size() - sizeof(size_t));
+    // Paso 7: Decodificar bits → píxeles
+    std::vector<unsigned char> pixels;
+    HuffmanNode* current = root;
 
-    // Convertir bytes a un string binario
-    string bitStream;
-    for (unsigned char b : bytes) {
-        bitStream += bitset<8>(b).to_string();
-    }
-
-    // Recortar el bitStream para que tenga solo los bits válidos
-    bitStream = bitStream.substr(0, numBitsValidos);
-    in.close();
-    
     for (char bit : bitStream) {
-        if (bit == '0') current = current->left;
-        else current = current->right;
-        
+        current = (bit == '0') ? current->left : current->right;
+
         if (!current->left && !current->right) {
             pixels.push_back(current->pixel);
             current = root;
         }
     }
-    
-    ofstream out(argumentos[2]);
-    out << "P3\n" << xTamano << " " << yTamano << "\n" << (int)maxIntensidad << "\n";
-    for (unsigned char pixel : pixels) {
-        out << (int)pixel << " ";
+
+    if (pixels.size() != W * H) {
+        std::cerr << "Advertencia: se decodificaron " << pixels.size()
+                  << " píxeles, pero se esperaban " << W * H << ".\n";
     }
-    out.close();    
-    std::cout << "El archivo " << argumentos[1] << " ha sido decodificado y almacenado en " << argumentos[2] << ".\n";
+
+    // Paso 8: Escribir imagen PGM
+    std::ofstream out(argumentos[2]);
+    if (!out) {
+        std::cerr << "Error: No se pudo crear el archivo " << argumentos[2] << ".\n";
+        return;
+    }
+
+    out << "P2\n" << W << " " << H << "\n" << static_cast<int>(M) << "\n";
+
+    for (size_t i = 0; i < pixels.size(); ++i) {
+        out << static_cast<int>(pixels[i]) << " ";
+        if ((i + 1) % W == 0) out << "\n";
+    }
+
+    out.close();
+    std::cout << "El archivo " << argumentos[1] << " ha sido decodificado exitosamente, y la imagen correspondiente se ha almacenado en el archivo " << argumentos[2] << ".\n";
 }
+
 
 //Funcion para segmentar 
 void segmentar(const std::vector<std::string>& argumentos) {

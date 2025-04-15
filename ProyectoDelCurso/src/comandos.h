@@ -13,6 +13,8 @@
 #include <list>
 #include <algorithm>
 #include <sstream>
+#include <cstring>
+
 
 //Todas las funciones de los comandos
 void cargarImagen(const std::vector<std::string>& argumentos);

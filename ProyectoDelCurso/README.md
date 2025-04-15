@@ -107,8 +107,8 @@ salir                                  # Cierra la aplicación
 📌 **Ejemplo de uso:**
 
 ```bash
-$ cargar_imagen img_02.pgm
-La imagen img_02.pgm ha sido cargada.
+$ cargar_imagen img_04.pgm
+La imagen img_04.pgm ha sido cargada.
 $ info_imagen
 Imagen cargada en memoria: img_02.pgm, ancho: 256, alto: 256.
 ```
