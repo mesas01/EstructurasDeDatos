@@ -11,7 +11,6 @@
 #include <fstream>
 #include <cstring>
 
-
 using namespace std;
 /*Creamos una clase de tipo Imagen*/
 Imagen imagen;
@@ -19,19 +18,23 @@ bool cargadaI = false;
 Volumen volumen;
 bool cargadaV = false;
 
+// Declaración de objetos globales para manejar imágenes y volúmenes
+Imagen imagen; // Objeto para almacenar una imagen cargada
+bool cargadaI = false; // Bandera para verificar si hay una imagen cargada
+Volumen volumen; // Objeto para almacenar un volumen cargado
+bool cargadaV = false; // Bandera para verificar si hay un volumen cargado
 
-
-/*Funcion que veifica si el archivo existe*/
+// Función que verifica si un archivo existe
 bool archivoExiste(const std::string& nombreArchivo) {
     std::ifstream archivo(nombreArchivo);
     return archivo.good();
 }
 
-/*Funcion para cargar una imagen*/
+// Función para cargar una imagen desde un archivo
 void cargarImagen(const std::vector<std::string>& argumentos) {
     std::string ruta = argumentos[1];
 
-    // Si no existe, intentamos con ruta relativa desde src/imagenesPrueba
+    // Verifica si el archivo existe, si no, intenta con una ruta alternativa
     if (!archivoExiste(ruta)) {
         std::string alternativa = "src/imagenesPrueba/" + ruta;
         if (archivoExiste(alternativa)) {
@@ -48,24 +51,25 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
         return;
     }
 
+    // Variables para almacenar los datos del encabezado de la imagen
     std::string codigo;
     int xTamano, yTamano, maxIntensidad;
 
-    // Leer el encabezado
+    // Leer el encabezado del archivo
     archivo >> codigo >> xTamano >> yTamano >> maxIntensidad;
 
-    // Configurar el objeto Imagen
+    // Configurar el objeto Imagen con los datos leídos
     imagen.setNombre(ruta);
     imagen.setCodigo(codigo);
     imagen.setXTamano(xTamano);
     imagen.setYTamano(yTamano);
     imagen.setMaxIntensidad(maxIntensidad);
 
-    // Leer los píxeles y almacenarlos en la lista de listas
+    // Leer los píxeles de la imagen y almacenarlos en una lista de listas
     std::list<std::list<int>> listaPixeles;
     for (int y = 0; y < yTamano; ++y) {
         std::list<int> fila;
-        for (int x = 0; x < xTamano; ++x) {
+        for (int x = 0; xTamano; ++x) {
             int valor;
             archivo >> valor;
             fila.push_back(valor);
@@ -73,10 +77,12 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
         listaPixeles.push_back(fila);
     }
 
+    // Asignar la lista de píxeles al objeto Imagen
     imagen.setLista(listaPixeles);
-    cargadaI = true;
+    cargadaI = true; // Marcar que hay una imagen cargada
     archivo.close();
 
+    // Verificar que el tamaño de la lista de píxeles coincida con el tamaño esperado
     if (static_cast<int>(imagen.getLista().size()) != imagen.getYTamano()) {
         std::cout << "Error: El archivo no tiene el tamaño correcto de filas.\n";
         return;
@@ -85,52 +91,55 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     std::cout << "La imagen " << ruta << " ha sido cargada.\n";
 }
 
-
-/*Funcion para cargar un volumen*/
+// Función para cargar un volumen compuesto por múltiples imágenes
 void cargarVolumen(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 3) {
         std::cout << "Error: Uso correcto -> cargar_volumen <nombre_base> <n_im>\n";
         return;
     }
-    std::string nombre;
-    std::vector<std::string> argumentosI;
-    std::string nombreBase = argumentos[1];
-    int nImagenes = std::stoi(argumentos[2]);
-    bool todasExisten = true;
-    std::list<Imagen> lImagenes;
 
+    std::string nombreBase = argumentos[1];
+    int nImagenes = std::stoi(argumentos[2]); // Número de imágenes en el volumen
+    bool todasExisten = true; // Bandera para verificar si todas las imágenes existen
+    std::list<Imagen> lImagenes; // Lista para almacenar las imágenes del volumen
+
+    // Extraer la parte relevante del nombre base
     std::string ultimos22 = nombreBase.erase(0, 15);
     if (ultimos22.size() > 15) {
         ultimos22.erase(ultimos22.size() - 4, 4); // Elimina los últimos 4 caracteres
-    }else {
-        ultimos22.erase(ultimos22.size() - 3, 3); // Elimina los últimos 4 caracteres
+    } else {
+        ultimos22.erase(ultimos22.size() - 3, 3); // Elimina los últimos 3 caracteres
     }
-    for (int i= 1; i <= nImagenes; i++) {
-        //std::cout << "Valor de i: " << i << std::endl;
-        // Construye el nombre del archivo con dos dígitos (01, 02, ..., 10, etc.)
-        std::string numeroImagen = (i < 10) ? "0" + std::to_string(i) : std::to_string(i); // Asegura que los números de 1 dígito tengan un 0 al inicio
+
+    // Iterar sobre el número de imágenes y cargar cada una
+    for (int i = 1; i <= nImagenes; i++) {
+        // Construir el nombre del archivo con formato de dos dígitos (01, 02, ...)
+        std::string numeroImagen = (i < 10) ? "0" + std::to_string(i) : std::to_string(i);
         std::string nombreArchivo = "imagenesPrueba/" + nombreBase + "/" + ultimos22 + numeroImagen + ".ppm";
-        //std::cout << "NOMBRE DEL ARCHIVO: " << nombreArchivo << std::endl;
+
+        // Verificar si el archivo existe
         if (!archivoExiste(nombreArchivo)) {
             std::cout << "Error: El archivo " << nombreArchivo << " no existe.\n";
             todasExisten = false;
         }
 
-        argumentosI.push_back("vacio");
-        argumentosI.push_back(nombreArchivo);
+        // Cargar la imagen y agregarla a la lista del volumen
+        std::vector<std::string> argumentosI = {"vacio", nombreArchivo};
         cargarImagen(argumentosI);
         lImagenes.push_back(imagen);
-        argumentosI.clear();
-
     }
-    cargadaV = true;
-    cargadaI = false;
+
+    cargadaV = true; // Marcar que hay un volumen cargado
+    cargadaI = false; // Reiniciar la bandera de imagen cargada
+
     if (todasExisten) {
         std::cout << "El volumen " << nombreBase << " ha sido cargado.\n";
     } else {
         std::cout << "Error: No se pudo cargar el volumen debido a archivos faltantes.\n";
         return;
     }
+
+    // Configurar el objeto Volumen con los datos cargados
     volumen.setNombre(nombreBase);
     volumen.setNImagenes(nImagenes);
     volumen.setLista(lImagenes);
@@ -144,6 +153,7 @@ void infoImagen() {
     }
     std::cout << "Imagen cargada en memoria: " << imagen.getNombre() << ", ancho: " << imagen.getXTamano() <<", alto: " << imagen.getYTamano() <<".\n";
 }
+
 //Funcion para mostrar la informacion del volumen cargado en memoria
 void infoVolumen() {
     if(!cargadaV){
@@ -412,7 +422,6 @@ void codificarImagen(const std::vector<std::string>& argumentos) {
     std::cout << "La imagen en memoria ha sido codificada exitosamente y almacenada en el archivo " << argumentos[1] << ".\n";
 }
 
-
 //Funcion para decodificar un archivo
 void decodificarArchivo(const std::vector<std::string>& argumentos) {
     if (argumentos.size() != 3) {
@@ -507,7 +516,6 @@ void decodificarArchivo(const std::vector<std::string>& argumentos) {
     out.close();
     std::cout << "El archivo " << argumentos[1] << " ha sido decodificado exitosamente, y la imagen correspondiente se ha almacenado en el archivo " << argumentos[2] << ".\n";
 }
-
 
 //Funcion para segmentar 
 void segmentar(const std::vector<std::string>& argumentos) {

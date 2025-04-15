@@ -23,10 +23,7 @@
  
  using namespace std;
  
- /**
-  * Clase Imagen
-  * Representa una imagen en escala de grises almacenada en una estructura de listas anidadas.
-  */
+ //Representa una imagen en escala de grises almacenada en una estructura de listas anidadas.
  class Imagen {
      private:
          std::string nombre;  // Nombre del archivo de la imagen
@@ -56,10 +53,7 @@
          const std::list<std::list<int>>& getLista() const;  // Devuelve la matriz de píxeles
  };
  
- /**
-  * Clase Volumen
-  * Representa un conjunto ordenado de imágenes que conforman un volumen 3D.
-  */
+ //Representa un conjunto ordenado de imágenes que conforman un volumen 3D
  class Volumen{
      private:
          std::string nombre;  // Nombre base del volumen (sin extensión)
@@ -95,7 +89,7 @@ struct Compare {
 
 //Clase árbol de Huffman
 class HuffmanTree {
-private:
+    private:
     //Raiz
     HuffmanNode* root;
     //Mapa para almacenar los códigos de Huffman
@@ -103,7 +97,7 @@ private:
     //Función para la construcción de los códigos de cada pixel
     void buildCodes(HuffmanNode* node, string code);
 
-public:
+    public:
     //Constructor
     HuffmanTree(const vector<unsigned long>& freq);
     //Getters
@@ -111,5 +105,5 @@ public:
     HuffmanNode* getRoot();
 };
  
- #endif
+ #endif CLASES_H
  
