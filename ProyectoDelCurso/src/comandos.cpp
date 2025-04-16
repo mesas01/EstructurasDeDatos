@@ -65,7 +65,7 @@ void cargarImagen(const std::vector<std::string>& argumentos) {
     std::list<std::list<int>> listaPixeles;
     for (int y = 0; y < yTamano; ++y) {
         std::list<int> fila;
-        for (int x = 0; xTamano; ++x) {
+        for (int x = 0; x < xTamano; ++x) {
             int valor;
             archivo >> valor;
             fila.push_back(valor);
