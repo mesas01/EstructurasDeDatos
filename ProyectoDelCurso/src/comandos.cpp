@@ -12,11 +12,7 @@
 #include <cstring>
 
 using namespace std;
-/*Creamos una clase de tipo Imagen*/
-Imagen imagen;
-bool cargadaI = false;
-Volumen volumen;
-bool cargadaV = false;
+
 
 // Declaración de objetos globales para manejar imágenes y volúmenes
 Imagen imagen; // Objeto para almacenar una imagen cargada

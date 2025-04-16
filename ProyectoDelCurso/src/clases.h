@@ -105,5 +105,5 @@ class HuffmanTree {
     HuffmanNode* getRoot();
 };
  
- #endif CLASES_H
+ #endif
  
