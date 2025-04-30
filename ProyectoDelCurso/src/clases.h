@@ -10,20 +10,20 @@
  * conjuntos de imágenes organizadas en volúmenes 3D.
 ***********************************************/
 
- #ifndef CLASES_H
- #define CLASES_H
+#ifndef CLASES_H
+#define CLASES_H
  
- #include <iostream>
- #include <list>
- #include <vector>
- #include <queue>
- #include <map>
- #include <bitset>
+#include <iostream>
+#include <list>
+#include <vector>
+#include <queue>
+#include <map>
+#include <bitset>
 
  
- using namespace std;
+using namespace std;
  
- //Representa una imagen en escala de grises almacenada en una estructura de listas anidadas.
+//Representa una imagen en escala de grises almacenada en una estructura de listas anidadas.
 class Imagen {
     private:
 
@@ -108,5 +108,5 @@ class HuffmanTree {
     HuffmanNode* getRoot();
 };
  
- #endif
+#endif
  
