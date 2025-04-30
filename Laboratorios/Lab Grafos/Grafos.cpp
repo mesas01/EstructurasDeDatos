@@ -25,6 +25,19 @@ Aristas:
 3 0
 
 Este grafo tiene un ciclo de Euler y un ciclo Hamiltoniano.
+
+Ejemplo de entrada para probar el programa:
+
+Número de vértices: 4
+Número de aristas: 5
+Aristas:
+0 0
+0 0
+0 0
+0 0
+0 0
+
+Este grafo no tiene un ciclo de Euler ni un ciclo Hamiltoniano.
 */
 
 #include <iostream>
