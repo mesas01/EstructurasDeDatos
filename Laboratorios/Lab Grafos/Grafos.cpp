@@ -137,18 +137,18 @@ int Euler::iseuler(int a[]) {
    int count = 0;
    // Cuenta los vértices con grado impar
    for (int i = 0; i < n; i++)
-       if (a[i] % 2 != 0) count++;
+    if (a[i] % 2 != 0) count++;
  
-   if (count == 0) {
+    if (count == 0) {
        cout << "Euler's circuit exists:\n";
        return 1; // Existe un circuito de Euler
-   } else if (count == 2) {
-       cout << "Euler's path exists:\n";
-       return 1; // Existe un camino de Euler
-   } else {
-       cout << "No Euler's path or circuit exists:\n\n";
-       return -1; // No existe ni camino ni circuito de Euler
-   }
+    }else if (count == 2) {
+        cout << "Euler's path exists:\n";
+        return 1; // Existe un camino de Euler
+    } else{
+            cout << "No Euler's path or circuit exists:\n\n";
+            return -1; // No existe ni camino ni circuito de Euler
+    }
 }
 
 // Clase para detectar caminos/ciclos hamiltonianos
