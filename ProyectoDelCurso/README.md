@@ -114,6 +114,82 @@ Imagen cargada en memoria: img_02.pgm, ancho: 256, alto: 256.
 ```
 
 ---
+## 🧩 Entrega 2 – Codificación de imágenes con Huffman
+
+### 🎯 Objetivo
+
+Implementar la compresión de imágenes en escala de grises utilizando el algoritmo de **Huffman**, generando archivos `.huf` compactos y decodificables a su versión original `.pgm`.
+
+---
+
+### 📁 Estructura de archivo `.huf`
+
+```
+[W][H][M][F0]...[FM][bits...][numBitsValidos]
+```
+
+- `W`, `H`: ancho y alto de la imagen (2 bytes cada uno)
+- `M`: intensidad máxima (1 byte)
+- `F0` a `FM`: frecuencias de cada intensidad (8 bytes cada una)
+- `bits...`: stream de bits con la codificación
+- `numBitsValidos`: número total de bits útiles (al final del archivo)
+
+---
+
+### 🔧 Comandos implementados
+
+```bash
+cargar_imagen <nombre_archivo.pgm>
+codificar_imagen <nombre_archivo.huf>
+decodificar_archivo <archivo.huf> <archivo_salida.pgm>
+info_imagen
+```
+
+---
+
+### 🧪 Ejemplo de uso
+
+```bash
+$ cargar_imagen img_04.pgm
+La imagen ha sido cargada.
+
+$ codificar_imagen img_04.huf
+La imagen en memoria ha sido codificada exitosamente y almacenada en el archivo img_04.huf.
+
+$ decodificar_archivo img_04.huf salida.pgm
+El archivo img_04.huf ha sido decodificado exitosamente y la imagen correspondiente se ha almacenado en salida.pgm.
+```
+
+---
+
+### 🧠 ¿Cómo funciona Huffman?
+
+- Se calcula cuántas veces aparece cada tono de gris.
+- Se construye un árbol de Huffman con esas frecuencias.
+- Se asignan códigos binarios más cortos a los tonos más comunes.
+- Se codifica toda la imagen en bits y se guarda en un archivo `.huf`.
+- Para decodificar, se reconstruye el árbol y se traduce el bitstream a los píxeles originales.
+
+---
+
+### 📂 Archivos importantes
+
+- `clases.cpp/h`: contiene la implementación de Huffman (`HuffmanTree`, `HuffmanNode`).
+- `comandos.cpp`: funciones `codificarImagen()` y `decodificarArchivo()`.
+- `imagenesPrueba/`: contiene imágenes `.pgm` para prueba.
+- `main.cpp`: bucle principal que interpreta comandos desde terminal.
+
+---
+
+### ✅ Estado del proyecto
+
+✔️ Carga y visualización de imágenes  
+✔️ Codificación con Huffman  
+✔️ Decodificación exacta  
+✔️ Validaciones por consola  
+✔️ Pruebas con múltiples imágenes
+
+---
 
 ## 🏆 Conclusión
 
@@ -127,3 +203,10 @@ Se pueden explorar mejoras como:
 
 🚀 ¡Espero que esta documentación sea útil para entender y ejecutar el proyecto! 🎯
 
+---
+### 👥 Autores
+
+- Santiago Mesa  
+- Jerónimo Chaparro Tenorio
+
+---
