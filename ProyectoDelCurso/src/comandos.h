@@ -14,6 +14,10 @@
 #include <algorithm> // Para funciones de manipulación de datos (e.g., sort)
 #include <sstream>  // Para manipulación de flujos de texto
 #include <cstring>  // Para funciones de manejo de cadenas de C
+#include <queue>
+#include <tuple>
+#include <limits>
+#include <cmath>
 
 // Declaración de todas las funciones utilizadas en los comandos
 

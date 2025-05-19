@@ -10,6 +10,10 @@
 #include "clases.h"
 #include <fstream>
 #include <cstring>
+#include <queue>
+#include <tuple>
+#include <limits>
+#include <cmath>
 
 using namespace std;
 
@@ -515,9 +519,100 @@ void decodificarArchivo(const std::vector<std::string>& argumentos) {
 
 //Funcion para segmentar 
 void segmentar(const std::vector<std::string>& argumentos) {
-    if (argumentos.size() < 3) {
-        std::cout << "Error: Uso correcto -> segmentar <salida_imagen.pgm> <semillas>\n";
+    // Paso 1: Validar imagen cargada y argumentos
+    if (!cargadaI) {
+        std::cout << "No hay una imagen cargada en memoria.\n";
         return;
     }
-    std::cout << "La imagen ha sido segmentada y almacenada en " << argumentos[1] << ".\n";
+
+    if (argumentos.size() < 5 || (argumentos.size() - 2) % 3 != 0 || argumentos.size() > 17) {
+        std::cout << "Error: Formato incorrecto. Uso -> segmentar salida.pgm x1 y1 l1 ... (máx 5 semillas)\n";
+        return;
+    }
+
+    std::string nombreSalida = argumentos[1];
+    int ancho = imagen.getXTamano();
+    int alto = imagen.getYTamano();
+
+    struct Semilla { int x, y, etiqueta; };
+    std::vector<Semilla> semillas;
+
+    for (size_t i = 2; i + 2 < argumentos.size(); i += 3) {
+        int x = std::stoi(argumentos[i]);
+        int y = std::stoi(argumentos[i + 1]);
+        int etiqueta = std::stoi(argumentos[i + 2]);
+        
+        if (x < 0 || x >= ancho || y < 0 || y >= alto || etiqueta < 1 || etiqueta > 255) {
+            std::cout << "Error: Semilla inválida.\n";
+            std::cout << "La imagen cargada tiene dimensiones: ancho = " << ancho << ", alto = " << alto << "\n";
+            std::cout << "Semilla problemática: x = " << x << ", y = " << y << ", etiqueta = " << etiqueta << "\n";
+            return;
+        }
+        semillas.push_back({x, y, etiqueta});
+    }
+
+    // Paso 2: Inicializar estructuras
+    std::vector<std::vector<int>> etiquetas(alto, std::vector<int>(ancho, 0));
+    std::vector<std::vector<int>> costos(alto, std::vector<int>(ancho, std::numeric_limits<int>::max()));
+
+    using Estado = std::tuple<int, int, int, int>; // (costo, y, x, etiqueta)
+    auto cmp = [](const Estado& a, const Estado& b) { return std::get<0>(a) > std::get<0>(b); };
+    std::priority_queue<Estado, std::vector<Estado>, decltype(cmp)> pq(cmp);
+
+    const auto& listaPixeles = imagen.getLista();
+    std::vector<std::vector<int>> matrizPixeles;
+
+    for (const auto& fila : listaPixeles) {
+        matrizPixeles.push_back(std::vector<int>(fila.begin(), fila.end()));
+    }
+
+    // Paso 3: Insertar semillas
+    for (const auto& s : semillas) {
+        pq.emplace(0, s.y, s.x, s.etiqueta);
+        costos[s.y][s.x] = 0;
+        etiquetas[s.y][s.x] = s.etiqueta;
+    }
+
+    // Paso 4: Ejecutar Dijkstra
+    const int dy[4] = {-1, 1, 0, 0};
+    const int dx[4] = {0, 0, -1, 1};
+
+    while (!pq.empty()) {
+        auto [costoActual, y, x, etiqueta] = pq.top();
+        pq.pop();
+
+        if (etiquetas[y][x] != etiqueta && costos[y][x] < costoActual)
+            continue; // Ya fue alcanzado por otro camino mejor
+
+        for (int d = 0; d < 4; ++d) {
+            int ny = y + dy[d], nx = x + dx[d];
+            if (ny >= 0 && ny < alto && nx >= 0 && nx < ancho) {
+                int diferencia = std::abs(matrizPixeles[y][x] - matrizPixeles[ny][nx]);
+                int nuevoCosto = costoActual + diferencia;
+                if (nuevoCosto < costos[ny][nx]) {
+                    costos[ny][nx] = nuevoCosto;
+                    etiquetas[ny][nx] = etiqueta;
+                    pq.emplace(nuevoCosto, ny, nx, etiqueta);
+                }
+            }
+        }
+    }
+
+    // Paso 5: Guardar la imagen segmentada en PGM
+    std::ofstream out(nombreSalida);
+    if (!out.is_open()) {
+        std::cout << "La imagen en memoria no pudo ser segmentada (no se pudo crear archivo).\n";
+        return;
+    }
+
+    out << "P2\n" << ancho << " " << alto << "\n255\n";
+    for (int y = 0; y < alto; ++y) {
+        for (int x = 0; x < ancho; ++x) {
+            out << etiquetas[y][x] << " ";
+        }
+        out << "\n";
+    }
+    out.close();
+
+    std::cout << "La imagen en memoria fue segmentada correctamente y almacenada en el archivo " << nombreSalida << ".\n";
 }
