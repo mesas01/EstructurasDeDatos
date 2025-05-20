@@ -1,0 +1,21 @@
+# Formato: 
+# ARTICULO <ID> | <TÍTULO> | <REVISTA> | <VOLUMEN> | <AÑO> | <AUTOR1>,<AUTOR2>,...
+# CITA <ORIGEN_ID> -> <DESTINO_ID>
+
+ARTICULO Kramer2006 | A. F. Kramer, et al. | NeuroImage | Vol. 29 | 2006 | Kramer,Colcombe,McAuley,Erickson,Scalf
+ARTICULO Larson2006 | E. B. Larson, et al. | JAMA | Vol. 295 | 2006 | Larson
+ARTICULO Trejo2001 | J. L. Trejo, et al. | Nature Reviews | Vol. 2 | 2001 | Trejo
+ARTICULO Yaffe2001 | K. Yaffe, et al. | Neurology | Vol. 57 | 2001 | Yaffe
+ARTICULO Weuve2004 | J. Weuve, et al. | Arch Intern Med | Vol. 164 | 2004 | Weuve
+ARTICULO Podewils2005 | L. J. Podewils, et al. | Neurology | Vol. 64 | 2005 | Podewils
+
+CITA Kramer2006 -> Larson2006
+CITA Kramer2006 -> Trejo2001
+CITA Kramer2006 -> Yaffe2001
+CITA Kramer2006 -> Weuve2004
+CITA Kramer2006 -> Podewils2005
+CITA Larson2006 -> Weuve2004
+CITA Larson2006 -> Podewils2005
+CITA Trejo2001 -> Yaffe2001
+CITA Weuve2004 -> Yaffe2001
+CITA Podewils2005 -> Yaffe2001
