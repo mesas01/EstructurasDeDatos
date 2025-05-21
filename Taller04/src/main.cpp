@@ -1,18 +1,19 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include "Articulo.h"
-#include "MapaDeCitaciones.h"
-#include "cargar_archivo.h"  
+#include <iostream>             // Entrada y salida estándar
+#include <string>               // Manejo de cadenas
+#include <vector>               // Uso de vectores (listas dinámicas)
+#include "Articulo.h"           // Definición de la clase Articulo
+#include "MapaDeCitaciones.h"  // Definición del grafo de artículos y citaciones
+#include "cargar_archivo.h"    // Función para cargar artículos desde archivo
 
+// Declaración anticipada de las funciones correspondientes a cada algoritmo
+void ejecutarAlgoritmo1(MapaDeCitaciones& mapa);  // Artículo más citado
+void ejecutarAlgoritmo2(MapaDeCitaciones& mapa);  // Componentes conectados tras eliminar un artículo
+void ejecutarAlgoritmo3(MapaDeCitaciones& mapa);  // Índice de referenciación
+void ejecutarAlgoritmo4(MapaDeCitaciones& mapa);  // Citaciones indirectas
 
-void ejecutarAlgoritmo1(MapaDeCitaciones& mapa);
-void ejecutarAlgoritmo2(MapaDeCitaciones& mapa);
-void ejecutarAlgoritmo3(MapaDeCitaciones& mapa);
-void ejecutarAlgoritmo4(MapaDeCitaciones& mapa);
+using namespace std;  // Para evitar usar std:: en cada línea
 
-using namespace std;
-
+// Función que muestra el menú principal del sistema
 void mostrarMenu() {
     cout << "\n====== MENU - Sistema de Citaciones ======" << endl;
     cout << "1. Agregar articulo" << endl;
@@ -26,17 +27,19 @@ void mostrarMenu() {
     cout << "Seleccione una opcion: ";
 }
 
+// Función principal del programa
 int main() {
-    MapaDeCitaciones mapa;
-    int opcion;
+    MapaDeCitaciones mapa;  // Se crea el grafo de citaciones
+    int opcion;              // Variable para controlar la opción seleccionada
 
     do {
-        mostrarMenu();
-        cin >> opcion;
-        cin.ignore();
+        mostrarMenu();       // Se muestra el menú al usuario
+        cin >> opcion;       // Se recibe la opción
+        cin.ignore();        // Limpia el buffer del enter
 
         switch (opcion) {
             case 1: {
+                // Agregar un nuevo artículo manualmente
                 string id, titulo, revista, volumen;
                 int año, numAutores;
                 vector<string> autores;
@@ -57,6 +60,7 @@ int main() {
                 cin >> numAutores;
                 cin.ignore();
 
+                // Se solicitan los nombres de los autores
                 for (int i = 0; i < numAutores; ++i) {
                     string autor;
                     cout << "Autor " << i + 1 << ": ";
@@ -64,6 +68,7 @@ int main() {
                     autores.push_back(autor);
                 }
 
+                // Se construye y agrega el artículo al mapa
                 Articulo nuevo(id, titulo, autores, revista, volumen, año);
                 mapa.agregarArticulo(nuevo);
                 cout << "Articulo agregado con exito." << endl;
@@ -71,6 +76,7 @@ int main() {
             }
 
             case 2: {
+                // Agregar una citación entre dos artículos existentes
                 string origen, destino;
                 cout << "ID del articulo que cita (origen): ";
                 getline(cin, origen);
@@ -81,19 +87,27 @@ int main() {
                 break;
             }
 
+            // Ejecuta el algoritmo 1: artículo más citado
             case 3:
                 ejecutarAlgoritmo1(mapa);
                 break;
+
+            // Ejecuta el algoritmo 2: contar componentes tras eliminar artículo
             case 4:
                 ejecutarAlgoritmo2(mapa);
                 break;
+
+            // Ejecuta el algoritmo 3: índice de referenciación
             case 5:
                 ejecutarAlgoritmo3(mapa);
                 break;
+
+            // Ejecuta el algoritmo 4: citaciones indirectas
             case 6:
                 ejecutarAlgoritmo4(mapa);
                 break;
 
+            // Cargar artículos y citaciones desde archivo
             case 7: {
                 string ruta = "datos/mapa_ejemplo.txt";
                 cargarDesdeArchivo(mapa, ruta);
@@ -101,15 +115,17 @@ int main() {
                 break;
             }
 
+            // Salir del sistema
             case 0:
                 cout << "Saliendo del programa..." << endl;
                 break;
 
+            // Validación de opción incorrecta
             default:
                 cout << "Opción invalida. Intente nuevamente." << endl;
         }
 
-    } while (opcion != 0);
+    } while (opcion != 0);  // Se repite mientras no se seleccione salir
 
-    return 0;
+    return 0;  // Fin del programa
 }
