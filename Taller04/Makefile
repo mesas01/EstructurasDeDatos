@@ -10,18 +10,19 @@ SRC = \
   src/main.cpp \
   src/Articulo.cpp \
   src/MapaDeCitaciones.cpp \
+  src/cargar_archivo.cpp \
   src/algoritmos/Algoritmo1.cpp \
   src/algoritmos/Algoritmo2.cpp \
   src/algoritmos/Algoritmo3.cpp \
   src/algoritmos/Algoritmo4.cpp
 
-# Compilar el ejecutable
+# Regla por defecto para compilar
 all: $(TARGET)
 
 $(TARGET): $(SRC)
 	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET).exe
 
-# Ejecutar el programa en Windows
+# Ejecutar el programa
 run: $(TARGET)
 	./$(TARGET).exe
 

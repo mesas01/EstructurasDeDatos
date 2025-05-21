@@ -1,0 +1,84 @@
+# 📘 Sistema de Citaciones Académicas
+
+Este proyecto implementa un sistema que permite gestionar un mapa de citaciones entre artículos académicos, modelando una red dirigida donde cada nodo representa un artículo y cada arco una citación.
+
+---
+
+## 📂 Estructura del Proyecto
+
+```
+Taller04/
+├── citaciones.exe              # Ejecutable generado
+├── diseño_tads.txt            # Diseño formal de los TADs usados
+├── Makefile                   # Compilador del proyecto
+├── README.md                  # Este archivo
+├── Taller4.pdf                # Enunciado del taller
+│
+├── datos/
+│   └── mapa_ejemplo.txt       # Archivo de entrada con artículos y citaciones
+│
+└── src/
+    ├── Articulo.cpp/.h        # Clase que representa un artículo
+    ├── MapaDeCitaciones.cpp/.h # Clase que representa el grafo de citaciones
+    ├── cargar_archivo.cpp/.h  # Función para cargar desde archivo
+    ├── main.cpp               # Menú e interacción con el usuario
+    └── algoritmos/            # Implementación de algoritmos solicitados
+        ├── Algoritmo1.cpp     # Artículo más citado
+        ├── Algoritmo2.cpp     # Componentes tras eliminar nodo
+        ├── Algoritmo3.cpp     # Índice de referenciación
+        ├── Algoritmo4.cpp     # Citaciones indirectas
+```
+
+---
+
+## ⚙️ Compilación y Ejecución
+
+### 🔧 Requisitos
+- Compilador `g++` compatible con C++17 (MinGW en Windows)
+- `make` instalado
+
+### ▶️ Comandos
+
+```bash
+make         # Compila todo el sistema
+make run     # Ejecuta el programa
+make clean   # Elimina el ejecutable
+```
+
+> 💡 Recomendado: ejecutar `chcp 65001` antes de `make run` en la consola de Windows para soportar tildes y caracteres Unicode.
+
+---
+
+## 🧪 Plan de Pruebas
+
+1. **Cargar archivo**
+   - Selecciona opción 7 → debe cargar `mapa_ejemplo.txt` correctamente.
+
+2. **Artículo más citado**
+   - Opción 3 → Resultado esperado: `K. Yaffe, et al.`
+
+3. **Eliminar un artículo y contar componentes**
+   - Opción 4 → Ingresa: `Kramer2006`
+   - Resultado esperado: `5 grupos`
+
+4. **Índice de referenciación**
+   - Opción 5 → Ingresa: `Trejo2001`
+   - Resultado esperado: `2.0`
+
+5. **Citaciones indirectas**
+   - Opción 6 → Ingresa: `Larson2006`
+   - Resultado esperado: `1` (Yaffe2001)
+
+6. **Casos límite**
+   - Artículos que no citan ni son citados → índice y citaciones indirectas deben ser `0`
+   - Identificadores mal escritos deben mostrar mensaje de error o ignorarse
+
+---
+
+## 📝 Observaciones
+
+- Los identificadores de artículos deben escribirse **exactamente como aparecen** en `mapa_ejemplo.txt`, sin anteponer la palabra `ARTICULO`.
+
+---
+
+Desarrollado por Santiago Mesa para el Taller 4 de la asignatura **Estructuras de Datos**.

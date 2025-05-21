@@ -3,8 +3,8 @@
 
 void ejecutarAlgoritmo3(MapaDeCitaciones& mapa) {
     std::string id;
-    std::cout << "ID del artículo para índice de referenciación: ";
+    std::cout << "\n\nID del articulo para indice de referenciacion: ";
     std::getline(std::cin, id);
     double indice = mapa.calcularIndiceReferenciacion(id);
-    std::cout << "Índice de referenciación: " << indice << std::endl;
+    std::cout << "\nIndice de referenciacion: " << indice << std::endl;
 }

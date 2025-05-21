@@ -1,0 +1,52 @@
+==============================
+ DISEÑO DE TADs - Taller 4
+==============================
+
+TAD: Articulo
+-------------
+Propósito:
+Representar un artículo académico que puede realizar y recibir citaciones.
+
+Estructura:
+- id: cadena
+- titulo: cadena
+- autores: lista de cadenas
+- revista: cadena
+- volumen: cadena
+- año: entero
+- citados: conjunto de identificadores de artículos citados
+- citadores: conjunto de identificadores de artículos que lo citan
+
+Operaciones:
+- crear_articulo(id, titulo, autores, revista, volumen, año)
+- agregar_citado(destino_id)
+- agregar_citador(origen_id)
+- obtener_citados()
+- obtener_citadores()
+
+----------------------------------------------------
+
+TAD: MapaDeCitaciones
+----------------------
+Propósito:
+Representar la estructura completa de citaciones entre múltiples artículos.
+
+Estructura:
+- artículos: conjunto de objetos Articulo (identificados por ID)
+- grafo_citaciones: representación dirigida de relaciones de citación
+
+Operaciones:
+- agregar_articulo(articulo)
+- agregar_citacion(origen_id, destino_id)
+- eliminar_articulo(id)
+- obtener_articulo(id)
+- articulo_mas_citado(): retorna el artículo con más citadores
+- contar_grupos_tras_eliminar(id): cantidad de componentes tras remover un artículo
+- calcular_indice_referenciacion(id): retorna el índice de referenciación
+- contar_citaciones_indirectas(id): retorna la cantidad de citaciones indirectas
+
+----------------------------------------------------
+
+Relaciones:
+- Cada Articulo mantiene tanto referencias salientes (citados) como entrantes (citadores)
+- El MapaDeCitaciones gestiona el conjunto de artículos y ejecuta análisis sobre ellos

@@ -89,13 +89,22 @@ int MapaDeCitaciones::contarCitacionesIndirectas(const std::string& id) {
 
     for (const auto& intermedio : directos) {
         if (articulos.find(intermedio) != articulos.end()) {
-            for (const auto& citadoPorIntermedio : articulos[intermedio].getCitados()) {
-                if (citadoPorIntermedio != id && directos.find(citadoPorIntermedio) == directos.end()) {
-                    indirectos.insert(citadoPorIntermedio);
+            const auto& segundoNivel = articulos[intermedio].getCitados();
+
+            for (const auto& candidato : segundoNivel) {
+                if (candidato != id && directos.find(candidato) == directos.end()) {
+                    indirectos.insert(candidato);
                 }
             }
         }
     }
 
+    // Quitar cualquier posible autor ya citado directamente o a sí mismo
+    indirectos.erase(id);  // nunca puede citarse a sí mismo como indirecto
+    for (const auto& directo : directos) {
+        indirectos.erase(directo); // eliminar citados directos
+    }
+
     return indirectos.size();
 }
+

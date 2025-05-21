@@ -17,6 +17,8 @@ public:
     void agregarArticulo(const Articulo& art);
     void agregarCita(const std::string& origenId, const std::string& destinoId);
 
+    void cargarDesdeArchivo(MapaDeCitaciones& mapa, const std::string& ruta);
+
     std::string articuloMasCitado();                       // Algoritmo 1
     int contarGruposTrasEliminar(const std::string& id);   // Algoritmo 2
     double calcularIndiceReferenciacion(const std::string& id); // Algoritmo 3

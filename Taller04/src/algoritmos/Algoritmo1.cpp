@@ -4,8 +4,8 @@
 void ejecutarAlgoritmo1(MapaDeCitaciones& mapa) {
     std::string resultado = mapa.articuloMasCitado();
     if (!resultado.empty()) {
-        std::cout << "Artículo más citado: " << resultado << std::endl;
+        std::cout << "\n\nArticulo mas citado: " << resultado << "\n"<<std::endl;
     } else {
-        std::cout << "No hay artículos citados aún." << std::endl;
+        std::cout << "No hay articulos citados aun." << std::endl;
     }
 }
