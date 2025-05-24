@@ -1,0 +1,28 @@
+# Comandos de prueba para segmentar imágenes con 1 a 5 semillas
+
+# Cargar imagen base
+cargar_imagen mapaRegiones.pgm
+
+# 1 Semilla
+segmentar regiones_1.pgm 30 30 50
+
+# 2 Semillas
+segmentar regiones_2.pgm 10 10 50 50 50 150
+
+# 3 Semillas
+segmentar regiones_3.pgm 10 10 30 30 60 120 50 30 200
+
+# 4 Semillas
+segmentar regiones_4.pgm 5 5 40 20 80 100 60 10 160 45 60 220
+
+# 5 Semillas
+segmentar regiones_5.pgm 5 5 20 20 20 80 40 80 160 60 10 200 50 50 255
+
+# Semilla fuera de rango
+segmentar regiones_invalidas.pgm 80 100 200
+
+# Semillas con etiquetas iguales
+segmentar regiones_eq.pgm 10 10 100 20 20 100
+
+# Formato incorrecto (argumentos insuficientes)
+segmentar regiones_mal.pgm 10 10

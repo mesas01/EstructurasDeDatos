@@ -526,7 +526,7 @@ void segmentar(const std::vector<std::string>& argumentos) {
     }
 
     if (argumentos.size() < 5 || (argumentos.size() - 2) % 3 != 0 || argumentos.size() > 17) {
-        std::cout << "Error: Formato incorrecto. Uso -> segmentar salida.pgm x1 y1 l1 ... (máx 5 semillas)\n";
+        std::cout << "Error: Formato incorrecto. Uso -> segmentar salida.pgm x1 y1 l1 ... (max 5 semillas)\n";
         return;
     }
 
@@ -543,9 +543,9 @@ void segmentar(const std::vector<std::string>& argumentos) {
         int etiqueta = std::stoi(argumentos[i + 2]);
         
         if (x < 0 || x >= ancho || y < 0 || y >= alto || etiqueta < 1 || etiqueta > 255) {
-            std::cout << "Error: Semilla inválida.\n";
+            std::cout << "Error: Semilla invalida.\n";
             std::cout << "La imagen cargada tiene dimensiones: ancho = " << ancho << ", alto = " << alto << "\n";
-            std::cout << "Semilla problemática: x = " << x << ", y = " << y << ", etiqueta = " << etiqueta << "\n";
+            std::cout << "Semilla problematica: x = " << x << ", y = " << y << ", etiqueta = " << etiqueta << "\n";
             return;
         }
         semillas.push_back({x, y, etiqueta});
