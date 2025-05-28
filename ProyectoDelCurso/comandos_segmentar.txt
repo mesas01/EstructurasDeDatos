@@ -26,3 +26,69 @@ segmentar regiones_eq.pgm 10 10 100 20 20 100
 
 # Formato incorrecto (argumentos insuficientes)
 segmentar regiones_mal.pgm 10 10
+
+
+cargar_imagen img_02.pgm
+
+# 1 Semilla
+segmentar seg_02_1.pgm 10 10 50
+
+# 2 Semillas
+segmentar seg_02_2.pgm 10 10 50 30 20 100
+
+# 3 Semillas
+segmentar seg_02_3.pgm 5 5 80 20 25 120 40 10 200
+
+# 4 Semillas
+segmentar seg_02_4.pgm 5 5 60 15 25 100 35 10 150 40 20 220
+
+# 5 Semillas
+segmentar seg_02_5.pgm 5 5 20 10 50 25 80 15 160 30 30 200 40 40 255
+
+# Casos de error
+segmentar seg_02_inv.pgm 100 100 200
+segmentar seg_02_eq.pgm 10 10 100 20 20 100
+segmentar seg_02_mal.pgm 10 10
+
+
+
+cargar_imagen img_04.pgm
+
+segmentar seg_04_1.pgm 10 10 60
+segmentar seg_04_2.pgm 5 5 30 25 15 90
+segmentar seg_04_3.pgm 5 5 70 20 10 110 35 10 190
+segmentar seg_04_4.pgm 10 10 40 20 30 100 35 5 160 50 10 210
+segmentar seg_04_5.pgm 5 5 20 15 25 60 25 40 150 30 10 210 40 30 255
+
+segmentar seg_04_inv.pgm 100 120 180
+segmentar seg_04_eq.pgm 10 10 120 15 15 120
+segmentar seg_04_mal.pgm 15 15
+
+
+
+cargar_imagen img_06.pgm
+
+segmentar seg_06_1.pgm 8 8 80
+segmentar seg_06_2.pgm 6 6 30 20 10 100
+segmentar seg_06_3.pgm 5 5 50 20 10 110 30 10 190
+segmentar seg_06_4.pgm 10 10 60 25 15 120 30 5 160 35 10 210
+segmentar seg_06_5.pgm 5 5 20 15 15 80 25 25 140 30 10 210 40 20 255
+
+segmentar seg_06_inv.pgm 100 120 200
+segmentar seg_06_eq.pgm 10 10 100 15 15 100
+segmentar seg_06_mal.pgm 15 15
+
+
+
+cargar_imagen img_08.pgm
+
+segmentar seg_08_1.pgm 5 5 60
+segmentar seg_08_2.pgm 5 5 50 15 10 100
+segmentar seg_08_3.pgm 8 8 80 20 20 120 35 15 200
+segmentar seg_08_4.pgm 10 10 40 15 25 100 30 5 150 40 20 220
+segmentar seg_08_5.pgm 5 5 20 20 20 60 25 35 160 30 10 210 40 30 255
+
+segmentar seg_08_inv.pgm 120 120 200
+segmentar seg_08_eq.pgm 5 5 150 10 10 150
+segmentar seg_08_mal.pgm 10 10
+
